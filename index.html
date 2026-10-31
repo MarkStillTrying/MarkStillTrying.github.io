@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小笼包子铺</title>
+<meta name="description" content="小笼包子铺：一个人做的游戏和项目。介绍、截图和下载。">
+<link rel="preload" href="assets/fonts/FusionPixel-sub.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<div class="page">
+  <nav class="top" aria-label="页面">
+    <a class="notch" href="#projects">项目</a>
+    <a class="notch" href="#about">关于</a>
+  </nav>
+
+  <!-- 店招：吊在墙上的铁牌 -->
+  <header class="shop">
+    <div class="hang">
+      <i class="chain l" aria-hidden="true"></i><i class="chain r" aria-hidden="true"></i>
+      <div class="sign">
+        <img class="steamer" src="assets/ui/steamer.png" alt="" width="48" height="40">
+        <h1>小笼包子铺</h1>
+      </div>
+    </div>
+    <p class="tag">一个人做游戏，<br class="ph">慢慢做，一直在做。</p>
+  </header>
+
+  <!-- 橱窗：动物站一排 + 游戏里的物品 -->
+  <section class="window" role="img" aria-label="橱窗：废墟城市前站着一排突变动物">
+    <div class="stage" data-sprites="mutant_dog,porcupine,snapping_turtle,cobra,centipede" data-auto></div>
+    <span class="label">《兽变纪元》里的突变动物</span>
+  </section>
+  <div class="poster-wrap"><div class="poster shelf" data-poster="31" data-fix="pins">
+    <h2>橱窗 <small>SHOWCASE</small></h2>
+    <div class="rule"></div>
+    <p class="dim">游戏里的物资和道具，按品质配框。</p>
+    <div class="tiles">
+      <figure class="tile"><img src="assets/games/ferazoic/tiles/nuclear_battery.png" width="56" height="56" alt="核电池"><figcaption>核电池</figcaption></figure>
+      <figure class="tile"><img src="assets/games/ferazoic/tiles/mutation_potion.png" width="56" height="56" alt="突变药剂"><figcaption>突变药剂</figcaption></figure>
+      <figure class="tile"><img src="assets/games/ferazoic/tiles/recruit_ticket.png" width="56" height="56" alt="诱饵罐头"><figcaption>诱饵罐头</figcaption></figure>
+      <figure class="tile"><img src="assets/games/ferazoic/tiles/token_ticket.png" width="56" height="56" alt="生锈钥匙"><figcaption>生锈钥匙</figcaption></figure>
+      <figure class="tile"><img src="assets/games/ferazoic/tiles/marble.png" width="56" height="56" alt="弹珠"><figcaption>弹珠</figcaption></figure>
+      <figure class="tile"><img src="assets/games/ferazoic/tiles/battery.png" width="56" height="56" alt="电池"><figcaption>电池</figcaption></figure>
+      <figure class="tile"><img src="assets/games/ferazoic/tiles/scavenge_map.png" width="56" height="56" alt="拾荒地图"><figcaption>拾荒地图</figcaption></figure>
+      <figure class="tile"><img src="assets/games/ferazoic/tiles/pull_tab.png" width="56" height="56" alt="拉环"><figcaption>拉环</figcaption></figure>
+    </div>
+  </div></div>
+
+  <main>
+    <h2 class="wallh" id="projects">项目</h2>
+    <!-- 作品海报由 js/projects.js 的列表生成，插在「下一个项目」前面 -->
+    <section class="grid" data-projects aria-label="作品">
+      <noscript><div class="poster-wrap"><div class="poster card small">
+        <h2>兽变纪元 <small>FERAZOIC</small></h2>
+        <div class="rule"></div>
+        <p>废土上的突变动物：挖避难所、招募动物、5v5 自动战斗。安卓，开发中。</p>
+        <div class="btns" style="margin-top:22px"><a class="btn" href="ferazoic.html">看介绍 →</a></div>
+      </div></div></noscript>
+      <div class="poster-wrap" data-after-projects><div class="poster card small" data-poster="77" data-fix="pins" data-curl>
+        <h2>下一个项目</h2>
+        <div class="rule"></div>
+        <div class="dim">还在做，做出来就挂这儿。<span class="hatch" aria-hidden="true"></span></div>
+      </div></div>
+      <div class="poster-wrap" id="about"><div class="poster card small" data-poster="5" data-fix="tape-top">
+        <h2>关于</h2>
+        <div class="rule"></div>
+        <p>一个人做游戏，程序、美术、策划、服务器都自己来。现在在做 2D 像素风的手游《兽变纪元》，先做出来，再慢慢打磨。这个站以后也会放游戏以外的项目。</p>
+      </div></div>
+    </section>
+  </main>
+
+  <footer class="foot">© 2026 小笼包子铺</footer>
+</div>
+<script src="js/projects.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>

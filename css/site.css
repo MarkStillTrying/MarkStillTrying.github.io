@@ -1,0 +1,196 @@
+/* 个人项目网站：像素风，铁皮墙 + 旧海报。
+   --s 是像素放大倍数：电脑 3 倍，手机 2 倍；所有尺寸都是 1 倍像素数 × --s。 */
+@font-face { font-family: "Fusion Pixel"; src: url(../assets/fonts/FusionPixel-sub.woff2) format("woff2"), url(../assets/fonts/FusionPixel-sub.ttf) format("truetype"); font-display: swap; }
+/* 字体只带常用字（见 tools/subset_font.py），加了生僻字要重新跑一遍 */
+
+:root {
+  --s: 3;
+  --paper: #e9dfc4; --paper-dark: #cdbf9a;
+  --ink: #1d1a16; --fg: #3b3128; --dim: #655640; --line: #8c7b5e; --rule: #b8a98a;   /* dim 在纸上 5.35:1 */
+  --rust: #b5602f; --rust-ink: #944719; --rust-dark: #7f3f1d; --rust-deep: #5a2b10;   /* rust 填色、画边；rust-ink 写字、按钮底（纸色字 4.98:1） */
+  --stamp: #a63d32;   /* 纸上 4.74:1 */
+  --focus: #ffd27a;   /* 键盘焦点框 */
+  --wall-text: #d9e1dc;
+  --wall-dark: rgba(12, 16, 18, .22);
+  --fs: calc(var(--s) * 8px);          /* 正文：像素字 12px 一字，字号用 12 的倍数 */
+}
+@media (max-width: 760px) { :root { --s: 2; } }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: "Fusion Pixel", "Zpix", monospace;
+  font-size: 24px; line-height: 1.5; color: var(--wall-text);
+  -webkit-font-smoothing: none; font-smooth: never;
+  background-color: #2a4650;
+  background-image: linear-gradient(var(--wall-dark), var(--wall-dark)), url(../assets/ui/wall.png);
+  background-size: auto, calc(480px * var(--s)) auto;
+  image-rendering: pixelated; image-rendering: crisp-edges;
+  min-height: 100vh;
+}
+img { image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
+a { color: inherit; text-decoration: none; }
+.page { max-width: 1440px; margin: 0 auto; padding: 0 calc(var(--s) * 24px) calc(var(--s) * 32px); }
+@media (max-width: 760px) { .page { padding: 0 16px 48px; } }
+
+/* 切角：方块四角去掉 2 像素，像铁皮剪出来的 */
+.notch { clip-path: polygon(0 6px, 6px 6px, 6px 0, calc(100% - 6px) 0, calc(100% - 6px) 6px, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 6px calc(100% - 6px), 0 calc(100% - 6px)); }
+
+/* 顶栏 */
+.top { display: flex; justify-content: flex-end; gap: 16px; padding-top: calc(var(--s) * 12px); flex-wrap: wrap; }
+.top a { padding: 6px 22px; background: var(--paper); color: var(--fg); box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--line); }
+.top a.on { background: var(--rust-ink); color: var(--paper); box-shadow: inset 0 0 0 4px var(--ink), inset 0 -8px 0 var(--rust-dark); }
+.top a:not(.on):hover { background: #f3ecd9; box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--rust); }
+.linkbtn { display: inline-block; padding: 6px 22px; background: var(--paper); color: var(--fg); text-shadow: none; box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--line); }
+.linkbtn:hover { background: #f3ecd9; box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--rust); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* 店招：两根链条吊着一块铁牌，牌子是九宫格（sign9.png，边 12 像素），上面是蒸笼和店名 */
+.shop { text-align: center; margin-top: calc(-12px * var(--s)); }   /* 链条从顶栏那一行上面垂下来 */
+.hang { display: inline-block; position: relative; padding-top: calc(34px * var(--s)); filter: drop-shadow(calc(var(--s) * 3px) calc(var(--s) * 4px) 0 rgba(6, 8, 10, .55)); }
+.hang .chain { position: absolute; top: 0; width: calc(6px * var(--s)); height: calc(40px * var(--s)); background: url(../assets/ui/chain.png) 0 0 / calc(6px * var(--s)) calc(12px * var(--s)) repeat-y; }
+.hang .chain.l { left: calc(22px * var(--s)); } .hang .chain.r { right: calc(22px * var(--s)); }
+.sign { position: relative; display: flex; align-items: center; gap: calc(6px * var(--s)); padding: calc(4px * var(--s)) calc(8px * var(--s)) calc(4px * var(--s)) calc(6px * var(--s));
+  border: calc(12px * var(--s)) solid transparent; border-image: url(../assets/ui/sign9.png) 12 fill round; }
+.sign .steamer { width: calc(48px * var(--s)); height: calc(40px * var(--s)); }
+.sign h1 { font-weight: normal; font-size: 72px; line-height: 1.2; color: var(--paper); text-shadow: 4px 4px 0 #000; letter-spacing: 4px; white-space: nowrap; }
+.shop .tag { color: #efe6d1; font-size: 36px; margin-top: calc(10px * var(--s)); text-shadow: 3px 3px 0 var(--ink); }
+.ph { display: none; }   /* 只在手机上换行 */
+@media (max-width: 760px) {
+  .shop { margin-top: calc(-10px * var(--s)); }
+  .hang { padding-top: calc(28px * var(--s)); } .hang .chain { height: calc(34px * var(--s)); }
+  .hang .chain.l { left: calc(14px * var(--s)); } .hang .chain.r { right: calc(14px * var(--s)); }
+  .sign { gap: calc(3px * var(--s)); padding: calc(3px * var(--s)) calc(5px * var(--s)) calc(3px * var(--s)) calc(3px * var(--s)); }
+  .sign h1 { font-size: 48px; letter-spacing: 2px; text-shadow: 3px 3px 0 #000; }
+  .shop .tag { font-size: 24px; } .ph { display: inline; }
+}
+
+/* 橱窗：深色展示窗，动物站一排；下面一张海报放游戏里的物品 */
+.window { position: relative; overflow: hidden; height: calc(100px * var(--s)); margin-top: calc(14px * var(--s)); box-shadow: inset 0 0 0 4px var(--ink); background-color: #26323a;
+  background-image: url(../assets/games/ferazoic/chapter1.png); background-size: calc(320px * var(--s)) auto; background-position: center 14%; }
+.window::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(27,24,20,.45), transparent 40%); pointer-events: none; }
+.window .stage { z-index: 1; }
+.window .label { position: absolute; left: 12px; bottom: 12px; z-index: 2; padding: 2px 12px; background: var(--paper); color: var(--fg); box-shadow: inset 0 0 0 3px var(--ink); }
+.shelf { padding: 28px 36px 32px; margin-top: calc(14px * var(--s)); }
+.tiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 20px; margin: 20px auto 0; max-width: calc(4 * 56px * var(--s) + 3 * 20px); }   /* 一行四个 */
+.tile { text-align: center; }
+.tile img { width: calc(56px * var(--s)); height: calc(56px * var(--s)); margin: 0 auto; }
+.tile figcaption { margin-top: 6px; color: var(--dim); }
+.wallh { font-size: 36px; color: #efe6d1; text-shadow: 3px 3px 0 var(--ink); margin-top: calc(16px * var(--s)); }
+@media (max-width: 760px) { .window { height: calc(90px * var(--s)); } .shelf { padding: 20px 16px 24px; } .tiles { gap: 12px 10px; } }
+
+/* 旧海报：撕边 + 影子 + 纸纹 + 胶带 / 图钉 / 卷角 */
+.poster-wrap { position: relative; filter: drop-shadow(calc(var(--s) * 3px) calc(var(--s) * 4px) 0 rgba(6, 8, 10, .55)); }
+.poster { position: relative; color: var(--fg); background: url(../assets/ui/paper.png) 0 0 / calc(192px * var(--s)); clip-path: polygon(var(--cut)); }
+.poster::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(0,0,0,.08), transparent 10%, transparent 90%, rgba(0,0,0,.06)), linear-gradient(0deg, rgba(90,70,40,.18), transparent 20%); }
+.poster > * { position: relative; }
+.tape { position: absolute; width: calc(48px * var(--s)); height: calc(14px * var(--s)); background: url(../assets/ui/tape.png) 0 0 / 100% 100%; z-index: 5; pointer-events: none; }
+.tape.tl { top: calc(-6px * var(--s)); left: calc(8px * var(--s)); }
+.tape.tr { top: calc(-6px * var(--s)); right: calc(8px * var(--s)); }
+.tape.t  { top: calc(-6px * var(--s)); left: 50%; margin-left: calc(-24px * var(--s)); }
+.curl { position: absolute; right: 0; bottom: 0; width: calc(20px * var(--s)); height: calc(20px * var(--s)); background: url(../assets/ui/curl.png) 0 0 / 100% 100%; z-index: 5; pointer-events: none; }
+.pin { position: absolute; width: calc(8px * var(--s)); height: calc(8px * var(--s)); background: url(../assets/ui/pin.png) 0 0 / 100% 100%; z-index: 5; pointer-events: none; }
+.pin.tl { top: calc(5px * var(--s)); left: calc(5px * var(--s)); }
+.pin.tr { top: calc(5px * var(--s)); right: calc(5px * var(--s)); }
+
+/* 按钮：铁锈橙，和背景分开 */
+.btn { display: inline-block; padding: 10px 24px; background: var(--rust-ink); color: var(--paper); box-shadow: inset 0 0 0 4px var(--ink), inset 0 -10px 0 var(--rust-dark); cursor: pointer; }
+.btn:hover { background: var(--rust-dark); box-shadow: inset 0 0 0 4px var(--ink), inset 0 -10px 0 var(--rust-deep); }
+.btn:active { background: var(--rust-dark); box-shadow: inset 0 0 0 4px var(--ink), inset 0 10px 0 var(--rust-deep); }
+.btn.ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 4px var(--line); }
+.btn.ghost:hover { background: rgba(0,0,0,.06); box-shadow: inset 0 0 0 4px var(--fg); }
+/* 还不能下载：不是按钮，只是一句说明，虚框 */
+.soon { display: inline-block; padding: 10px 20px; color: var(--dim); box-shadow: inset 0 0 0 3px var(--line); }
+
+/* 章、标签、分隔线 */
+.stamp { display: inline-block; color: var(--stamp); box-shadow: inset 0 0 0 4px var(--stamp); padding: 2px 14px; background: rgba(233,223,196,.6); transform: rotate(-6deg); }
+.chip { display: inline-block; padding: 0 10px; box-shadow: inset 0 0 0 4px var(--rust); color: var(--rust-ink); }
+.rule { border-top: 4px dashed var(--rule); margin: 14px 0; }
+.dim { color: var(--dim); }
+.hatch { display: inline-block; width: 120px; height: 20px; vertical-align: middle; background: repeating-linear-gradient(45deg, var(--line) 0 4px, transparent 4px 8px); }
+h2 { font-weight: normal; font-size: 36px; }
+h2 small { font-size: 24px; color: var(--rust-ink); letter-spacing: 6px; white-space: nowrap; }
+h3 { font-weight: normal; font-size: 24px; }
+
+/* 首页：作品格子。第一张大，其余小 */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(var(--s) * 14px); margin-top: calc(var(--s) * 6px); align-items: start; }   /* 海报各有各的高，像随手贴的 */
+.card { padding: 22px 24px 24px; min-height: 100%; display: flex; flex-direction: column; }
+.card .cover { position: relative; overflow: hidden; box-shadow: inset 0 0 0 4px var(--ink); background-color: #26323a; height: calc(80px * var(--s)); background-size: calc(320px * var(--s)) auto; background-position: center 14%; }
+.card .cover .stamp { position: absolute; top: 12px; left: 12px; }
+.card .body { padding: 20px 4px 8px; flex: 1; }
+.card .state { margin-top: 4px; color: var(--rust-ink); }
+.card .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.card .blurb { margin-top: 14px; line-height: 1.75; }
+.card .role { margin-top: 10px; color: var(--dim); }
+.card .btns { display: flex; gap: 16px; margin-top: 22px; flex-wrap: wrap; align-items: center; }
+.card.small { padding: 36px 32px; justify-content: center; }
+.card.small p { margin-top: 4px; line-height: 1.75; }
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; }
+  .card { padding: 16px; }
+  .card .cover { height: calc(90px * var(--s)); }
+  .card.small { padding: 32px 24px; }
+}
+
+/* 动物：精灵图，8 帧循环 */
+.stage { position: absolute; left: 0; right: 0; bottom: 0; height: 100%; }
+.sprite { position: absolute; bottom: calc(var(--y, 6) * var(--s) * 1px); left: calc(var(--x, 0) * var(--s) * 1px);
+  width: calc(var(--fw) * var(--s) * 1px); height: calc(var(--fh) * var(--s) * 1px);
+  background-repeat: no-repeat;
+  background-size: calc(var(--fw) * 8 * var(--s) * 1px) calc(var(--fh) * var(--s) * 1px);
+  animation: play var(--dur, 1000ms) steps(8) infinite; }
+@keyframes play { to { background-position-x: calc(var(--fw) * -8 * var(--s) * 1px); } }
+
+/* 游戏介绍页 */
+.gh { position: relative; height: calc(150px * var(--s)); overflow: hidden; box-shadow: inset 0 0 0 4px var(--ink); background-size: calc(320px * var(--s)) auto; background-position: center 16%; margin-top: calc(var(--s) * 8px); }
+.gh .title { position: absolute; left: calc(8px * var(--s)); bottom: calc(10px * var(--s)); z-index: 2; }
+.gh .title .big { font-weight: normal; font-size: 96px; line-height: 1.1; color: #efe6d1; text-shadow: 6px 6px 0 var(--ink); }
+.gh .stage { left: calc(150px * var(--s)); }   /* 标题占左边，动物在右边排开 */
+.gh .title .en { color: #e0b27a; letter-spacing: 12px; text-shadow: 3px 3px 0 var(--ink); }
+.gh::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(27,24,20,.6), transparent 45%); }
+.gh .stage { z-index: 1; }
+@media (max-width: 760px) {
+  .gh { height: calc(130px * var(--s)); }
+  .gh .title { top: calc(8px * var(--s)); bottom: auto; }   /* 手机上标题放上面，动物在下面 */
+  .gh .title .big { font-size: 48px; text-shadow: 4px 4px 0 var(--ink); }
+  .gh .title .en { font-size: 24px; letter-spacing: 6px; }
+  .gh .stage { left: 0; }
+}
+.cols { display: grid; grid-template-columns: 3fr 2fr; gap: calc(var(--s) * 14px); margin-top: calc(var(--s) * 14px); align-items: start; }
+.cols .dl-wrap { position: sticky; top: 24px; }   /* 「怎么玩」跟着滚，往下读也看得见 */
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } .cols .dl-wrap { order: -1; position: static; } }
+.dl .hot { color: var(--rust-ink); }
+.intro { padding: 36px 40px 40px; }
+.intro p { margin-top: 12px; line-height: 1.75; }
+.feats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+.feats div { padding: 14px 18px; box-shadow: inset 0 0 0 4px var(--rule); }
+.feats b { display: block; font-weight: normal; }
+.feats b::before { content: ""; display: inline-block; width: 12px; height: 12px; background: var(--rust); margin-right: 12px; }
+.feats span { color: var(--dim); }
+@media (max-width: 760px) { .feats { grid-template-columns: 1fr; } .intro { padding: 24px 20px; } }
+.dl { padding: 36px 40px 40px; }
+dl { display: grid; grid-template-columns: minmax(96px, max-content) 1fr; column-gap: 12px; row-gap: 6px; }
+dt { color: var(--dim); }
+.shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+.shots div { height: calc(60px * var(--s)); background-size: cover; background-position: center 25%; box-shadow: inset 0 0 0 4px var(--ink); }
+@media (max-width: 760px) { .shots { grid-template-columns: 1fr 1fr; } }
+.roster { --s: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }   /* 动物按 2 倍放，格子才装得下 */
+.roster > div { text-align: center; position: relative; overflow: hidden; height: calc(100px * var(--s)); box-shadow: inset 0 0 0 4px var(--rule); background: rgba(0,0,0,.04); }
+.roster .sprite { left: 50%; margin-left: calc(var(--fw) * var(--s) * -0.5px); bottom: calc(18px * var(--s)); }
+.roster .name { position: absolute; left: 0; right: 0; bottom: 8px; }
+/* 品质色和游戏里一致：蓝 稀有 / 紫 史诗 / 橙 传说，纸上都在 4.5:1 以上 */
+.roster .r-rare { color: #35608c; } .roster .r-epic { color: #6b4489; } .roster .r-legendary { color: var(--rust-ink); }
+@media (max-width: 760px) { .roster { grid-template-columns: repeat(2, 1fr); } }
+.back { margin-top: calc(var(--s) * 14px); display: flex; justify-content: flex-start; gap: 16px; flex-wrap: wrap; }
+
+/* 页脚 */
+.foot { margin-top: calc(var(--s) * 20px); color: #b4c6c4; text-shadow: 2px 2px 0 var(--ink); text-align: center; }
+
+/* 键盘焦点：切角和撕边会把 outline 裁掉，所以用内描边画焦点框 */
+:focus-visible { outline: 4px solid var(--focus); outline-offset: 2px; }
+.btn:focus-visible, .top a:focus-visible, .linkbtn:focus-visible { outline: none; box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--focus); }
+.btn.ghost:focus-visible { box-shadow: inset 0 0 0 4px var(--focus); }
+
+/* 系统设了「减少动态」：动物停在第一帧 */
+@media (prefers-reduced-motion: reduce) { .sprite { animation: none; } }
