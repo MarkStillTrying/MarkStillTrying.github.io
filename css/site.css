@@ -161,6 +161,14 @@ h3 { font-weight: normal; font-size: 24px; }
 .cols .dl-wrap { position: sticky; top: 24px; }   /* 「怎么玩」跟着滚，往下读也看得见 */
 @media (max-width: 760px) { .cols { grid-template-columns: 1fr; } .cols .dl-wrap { order: -1; position: static; } }
 .dl .hot { color: var(--rust-ink); }
+.dl #download { margin-top: 4px; }
+.dlblock { margin-top: 18px; }
+.dlblock .btns { margin-top: 10px; gap: 12px 16px; }
+.dlblock .ver { flex-basis: 100%; }   /* 版本、大小、日期单独一行 */
+.dlblock .ver:empty { display: none; }
+.notes { margin: 10px 0 0 0; padding-left: 0; list-style: none; }
+.notes li { position: relative; padding-left: 22px; line-height: 1.6; color: var(--fg); }
+.notes li::before { content: ""; position: absolute; left: 2px; top: 13px; width: 10px; height: 10px; background: var(--rust); }   /* 像素方块当项目符号 */
 .intro { padding: 36px 40px 40px; }
 .intro p { margin-top: 12px; line-height: 1.75; }
 .feats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
