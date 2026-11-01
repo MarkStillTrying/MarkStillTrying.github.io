@@ -163,7 +163,7 @@ h3 { font-weight: normal; font-size: 24px; }
 .dl .hot { color: var(--rust-ink); }
 .dl #download { margin-top: 4px; }
 .dlblock { margin-top: 18px; }
-.dlblock .btns { margin-top: 10px; gap: 12px 16px; }
+.dlblock .btns { display: flex; flex-wrap: wrap; align-items: center; margin-top: 10px; gap: 12px 16px; }
 .dlblock .ver { flex-basis: 100%; }   /* 版本、大小、日期单独一行 */
 .dlblock .ver:empty { display: none; }
 .notes { margin: 10px 0 0 0; padding-left: 0; list-style: none; }
