@@ -57,7 +57,15 @@ a { color: inherit; text-decoration: none; }
 .sign .steamer { width: calc(48px * var(--s)); height: calc(40px * var(--s)); }
 .sign h1 { font-weight: normal; font-size: 72px; line-height: 1.2; color: var(--paper); text-shadow: 4px 4px 0 #000; letter-spacing: 4px; white-space: nowrap; }
 .shop .mid { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: calc(8px * var(--s)) 0; }
-.shop .mascot { width: calc(81px * var(--s)); height: calc(87px * var(--s)); filter: drop-shadow(calc(var(--s) * 3px) calc(var(--s) * 4px) 0 rgba(6, 8, 10, .5)); }
+/* 吉祥物：一排小包子。--ms 是它们的放大倍数（比页面小一档：电脑 2 倍，手机 1 倍）；.flip 朝左；--face 由 js 临时改成转身 */
+.mascots { --ms: 2; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: calc(12px * var(--ms)); filter: drop-shadow(calc(var(--ms) * 2px) calc(var(--ms) * 3px) 0 rgba(6, 8, 10, .5)); }
+.mascots .m { display: block; animation: hop var(--hd, 1.2s) steps(5, jump-none) infinite; animation-delay: var(--hdelay, 0s); }
+.mascots .m img { width: calc(var(--w) * var(--ms) * 1px); height: calc(var(--h) * var(--ms) * 1px); transform: scaleX(var(--face, 1)); }
+.mascots .m.flip img { --face: -1; }
+.mascots .m.hide { display: none; }
+
+@keyframes hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(calc(-7px * var(--ms))); } 72% { transform: translateY(0); } }
+@media (max-width: 760px) { .mascots { --ms: 1; } }
 .shop .tag { color: #efe6d1; font-size: 36px; margin-top: calc(8px * var(--s)); text-shadow: 3px 3px 0 var(--ink); }
 .ph { display: none; }   /* 只在手机上换行 */
 .shop .down { color: #efe6d1; text-shadow: 3px 3px 0 var(--ink); padding: 8px 16px; animation: bob 1.2s steps(2) infinite; }
@@ -204,7 +212,7 @@ dt { color: var(--dim); }
 .btn.ghost:focus-visible { box-shadow: inset 0 0 0 4px var(--focus); }
 
 /* 系统设了「减少动态」：动物停在第一帧，「往下翻」不跳 */
-@media (prefers-reduced-motion: reduce) { .sprite, .shop .down { animation: none; } html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) { .sprite, .shop .down, .mascots .m { animation: none; } html { scroll-behavior: auto; } }
 
 /* =====================================================================
    项目画风。每个项目一节 .t-<theme>，换掉面板、按钮、标签、底纹用的图。

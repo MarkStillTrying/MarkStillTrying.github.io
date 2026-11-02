@@ -10,7 +10,8 @@
 - `js/projects.js`：**作品列表**。加一款游戏就在这里加一条（字段说明写在文件开头）。下载也写在这里（`downloads`）：安卓指向这个仓库最新 Release 里的 .apk，网页打开时自己去查有没有、显示版本和大小，所以发新版只要在 GitHub 发一个 Release，网站不用改；苹果拿到 TestFlight 公开链接后填进 `ios.url`。
 - `js/site.js`：撕边、动物精灵动画、首页海报的生成。
 - `css/site.css`：样式。`--s` 是像素放大倍数（电脑 3 倍、手机 2 倍）。
-- `assets/ui/`：铁皮墙、旧纸、胶带、卷角、图钉、店招的铁牌和链条、蒸笼（都是代码画的像素图；店招那几张由 `tools/sign.py` 画）、吉祥物 `mascot.png`（Mark 的吕布包子，从原图缩回 1 倍像素、去掉背景）。
+- `assets/ui/`：铁皮墙、旧纸、胶带、卷角、图钉、店招的铁牌和链条、蒸笼（都是代码画的像素图；店招那几张由 `tools/sign.py` 画）。
+- `assets/ui/mascots/`：吉祥物，一群小笼包。Mark 画的三个（戴王冠的 king、猫脸的 cat、吕布 lvbu）从原图缩回 1 倍像素、去掉背景；另外四个（厨师 chef、画家 artist、店小二 waiter、写代码的 coder）是 `tools/baozi.py` 画的：从国王身上抠出光身子（base.png），照 Mark 的画风换表情、加帽子和手里的东西。再加一个就在 `baozi.py` 里照着写一个函数。首页第一屏那一排在 `index.html` 里排（中间放最主要的，放不下时从两头往里藏）；`js/site.js` 的 liveMascots 管藏、翻面（左半边朝右、右半边朝左）、蹦和偶尔转身。
 - `assets/games/ferazoic/tiles/`：首页橱窗里的物品格子，用游戏里的图标和品质框拼的。
 - `assets/games/<游戏>/`：每款游戏的图：背景、截图、动物精灵图。
 - `assets/fonts/`：像素字体 Fusion Pixel（OFL 授权，许可证在旁边）。网页用的是裁过的小字体（只带常用字，156 KB）。

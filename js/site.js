@@ -60,6 +60,45 @@
   }
   function layoutAllStages() { Array.prototype.forEach.call(document.querySelectorAll(".stage[data-auto]"), layoutStage); }
 
+  // 吉祥物那一排：每只跳的节奏错开；每隔几秒随机挑一只转身看另一边，过一会儿转回来。系统设了「减少动态」就都不动
+  // 首页那一排吉祥物：放不下就从两头轮流往里藏，剩下的左半边朝右、右半边朝左（翻面），各自蹦、偶尔转个身
+  function liveMascots(row) {
+    var all = Array.prototype.slice.call(row.querySelectorAll(".m")); if (!all.length) return;
+    var r = rng(7), shown = all;
+    all.forEach(function (m) {
+      var img = m.querySelector("img");
+      if (img) { img.style.setProperty("--w", img.getAttribute("width")); img.style.setProperty("--h", img.getAttribute("height")); }
+      m.style.setProperty("--hd", (1000 + Math.floor(r() * 500)) + "ms");
+      m.style.setProperty("--hdelay", "-" + Math.floor(r() * 1000) + "ms");
+    });
+    function fit() {
+      var ms = parseFloat(getComputedStyle(row).getPropertyValue("--ms")) || 1;
+      var gap = 12 * ms, avail = (row.parentNode || row).clientWidth;
+      var w = all.map(function (m) { var img = m.querySelector("img"); return (img ? parseInt(img.getAttribute("width"), 10) : 0) * ms; });
+      var lo = 0, hi = all.length, cutLeft = true;
+      while (hi - lo > 1) {
+        var total = gap * (hi - lo - 1);
+        for (var i = lo; i < hi; i++) total += w[i];
+        if (total <= avail) break;
+        if (cutLeft) lo++; else hi--;
+        cutLeft = !cutLeft;
+      }
+      shown = all.slice(lo, hi);
+      all.forEach(function (m, i) { m.classList.toggle("hide", i < lo || i >= hi); });
+      shown.forEach(function (m, i) { m.classList.toggle("flip", i >= Math.ceil(shown.length / 2)); });
+    }
+    fit();
+    var t; window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(fit, 100); });
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    function turn() {
+      var m = shown[Math.floor(r() * shown.length)], img = m.querySelector("img"); if (!img) return;
+      var face = m.classList.contains("flip") ? 1 : -1;   // 转到和平时相反的那边
+      img.style.setProperty("--face", face);
+      setTimeout(function () { img.style.removeProperty("--face"); }, 900 + Math.floor(r() * 1500));
+    }
+    (function loop() { setTimeout(function () { turn(); loop(); }, 2500 + Math.floor(r() * 3500)); })();
+  }
+
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
   // 查 GitHub 上最新的 Release：有就回 { tag, date, apk: { url, size } }，没发过回 null，查不了（限流、断网）回 undefined。
@@ -172,6 +211,7 @@
     Array.prototype.forEach.call(document.querySelectorAll("[data-sprites]"), function (st) {
       st.getAttribute("data-sprites").split(",").forEach(function (item) { var e = sprite(item.trim()); if (e) st.appendChild(e); });
     });
+    Array.prototype.forEach.call(document.querySelectorAll(".mascots"), liveMascots);
     layoutAllStages();
     var t; window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(layoutAllStages, 100); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutAllStages);
