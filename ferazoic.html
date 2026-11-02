@@ -5,13 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>兽变纪元 · Ferazoic — 小笼包子铺</title>
 <meta name="description" content="废土突变动物题材的多人手游：地下避难所、招募养成、5v5 自动战斗、禁区大地图。安卓，开发中。">
+<link rel="icon" href="assets/ui/mascot.png" type="image/png">
 <link rel="preload" href="assets/fonts/FusionPixel-sub.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/site.css">
 </head>
-<body>
-<div class="page">
+<!-- 整页用《兽变纪元》自己的画风（.t-ferazoic）：水泥墙、游戏里的铁框面板和按钮 -->
+<body class="t-ferazoic themed">
+<div class="band"><div class="page">
   <nav class="top" aria-label="页面">
-    <a class="notch" href="index.html">项目</a>
+    <a class="gback" href="index.html"><span class="sr-only">回主页</span></a>
+    <a class="home" href="index.html"><img src="assets/ui/steamer.png" alt="" width="48" height="40"><span class="hname">小笼包子铺</span></a>
+    <span class="grow"></span>
+    <a class="notch" href="index.html#projects">项目</a>
     <a class="notch" href="index.html#about">关于</a>
   </nav>
 
@@ -23,12 +28,12 @@
     </header>
 
     <div class="cols">
-      <div class="poster-wrap"><div class="poster intro" data-poster="11" data-fix="tape" data-curl>
-        <span class="stamp">开发中</span>
-        <h2 style="margin-top:12px">废土上的突变动物</h2>
+      <div class="panel intro">
+        <div class="phead"><h2>废土上的突变动物</h2><span class="status">开发中</span></div>
         <div class="rule"></div>
         <p>末日之后，动物们发生了突变。你带着一群幸存的居民，在废墟下面挖一座避难所，一层一层往下盖房间；派远征队去外面搜刮物资，派打猎队去找吃的。</p>
         <p>招募突变动物，升级、升星、穿装备，排好五人小队，看它们自动战斗：推征途、打食物链，再到禁区的大地图上打野怪、采资源、和其他玩家抢地盘。</p>
+        <h3 style="margin-top:28px">玩法</h3>
         <div class="feats">
           <div><b>地下避难所</b><span>一层层往下挖，房间能连通</span></div>
           <div><b>5v5 自动战斗</b><span>排好阵容，看它们打</span></div>
@@ -52,9 +57,9 @@
         <p class="dim" style="margin-top:8px">废墟边缘 · 毒雾沼泽 · 辐射荒原</p>
         <h3 style="margin-top:28px">我做了什么</h3>
         <p>从程序、美术、策划到服务器，都是我一个人做的：Unity（C#）做客户端，ASP.NET Core 做服务器，战斗在服务器结算、手机只播放战报；动物是逐像素画的。</p>
-      </div></div>
+      </div>
 
-      <div class="poster-wrap dl-wrap"><div class="poster dl" data-poster="23" data-fix="pins">
+      <div class="panel dl">
         <h2>怎么玩</h2>
         <div class="rule"></div>
         <dl>
@@ -66,16 +71,16 @@
         </dl>
         <div class="rule"></div>
         <h2 id="download">下载</h2>
-        <!-- 两个平台的按钮和注意事项按 js/projects.js 里 ferazoic 那条的 downloads 生成 -->
+        <!-- 按渠道（测试服 / 正式服）和平台（安卓 / 苹果）生成，内容在 js/projects.js 里 ferazoic 那条的 downloads -->
         <div data-downloads="ferazoic"></div>
-        <noscript><p><a class="btn" href="https://github.com/MarkStillTrying/MarkStillTrying.github.io/releases/latest/download/ferazoic-android.apk">安卓版下载</a></p></noscript>
-      </div></div>
+        <noscript><p><a class="gbtn ok" href="https://github.com/MarkStillTrying/MarkStillTrying.github.io/releases/latest/download/ferazoic-android.apk">安卓版下载</a></p></noscript>
+      </div>
     </div>
 
-    <div class="back"><a class="linkbtn notch" href="index.html">← 回到全部项目</a></div>
+    <div class="back"><a class="gback" href="index.html"><span class="sr-only">回主页</span></a><a class="gbtn" href="index.html#projects">← 回到全部项目</a></div>
   </main>
   <footer class="foot">© 2026 小笼包子铺</footer>
-</div>
+</div></div>
 <script src="js/projects.js"></script>
 <script src="js/site.js"></script>
 </body>

@@ -1,4 +1,4 @@
-/* 个人项目网站：像素风，铁皮墙 + 旧海报。
+/* 个人项目网站：像素风，铁皮墙 + 旧海报；每个项目一段，用它自己的画风（文件最后的「项目画风」）。
    --s 是像素放大倍数：电脑 3 倍，手机 2 倍；所有尺寸都是 1 倍像素数 × --s。 */
 @font-face { font-family: "Fusion Pixel"; src: url(../assets/fonts/FusionPixel-sub.woff2) format("woff2"), url(../assets/fonts/FusionPixel-sub.ttf) format("truetype"); font-display: swap; }
 /* 字体只带常用字（见 tools/subset_font.py），加了生僻字要重新跑一遍 */
@@ -12,12 +12,11 @@
   --focus: #ffd27a;   /* 键盘焦点框 */
   --wall-text: #d9e1dc;
   --wall-dark: rgba(12, 16, 18, .22);
-  --fs: calc(var(--s) * 8px);          /* 正文：像素字 12px 一字，字号用 12 的倍数 */
 }
 @media (max-width: 760px) { :root { --s: 2; } }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
   font-family: "Fusion Pixel", "Zpix", monospace;
   font-size: 24px; line-height: 1.5; color: var(--wall-text);
@@ -30,23 +29,26 @@ body {
 }
 img { image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
 a { color: inherit; text-decoration: none; }
-.page { max-width: 1440px; margin: 0 auto; padding: 0 calc(var(--s) * 24px) calc(var(--s) * 32px); }
-@media (max-width: 760px) { .page { padding: 0 16px 48px; } }
+.page { max-width: 1440px; margin: 0 auto; padding: 0 calc(var(--s) * 24px); }
+@media (max-width: 760px) { .page { padding: 0 16px; } }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.grow { flex: 1; }
 
 /* 切角：方块四角去掉 2 像素，像铁皮剪出来的 */
 .notch { clip-path: polygon(0 6px, 6px 6px, 6px 0, calc(100% - 6px) 0, calc(100% - 6px) 6px, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 6px calc(100% - 6px), 0 calc(100% - 6px)); }
 
-/* 顶栏 */
-.top { display: flex; justify-content: flex-end; gap: 16px; padding-top: calc(var(--s) * 12px); flex-wrap: wrap; }
+/* 顶栏：左上角回主页，右边页签 */
+.top { display: flex; align-items: center; gap: 16px; padding-top: calc(var(--s) * 12px); flex-wrap: wrap; position: relative; z-index: 3; }
 .top a { padding: 6px 22px; background: var(--paper); color: var(--fg); box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--line); }
-.top a.on { background: var(--rust-ink); color: var(--paper); box-shadow: inset 0 0 0 4px var(--ink), inset 0 -8px 0 var(--rust-dark); }
 .top a:not(.on):hover { background: #f3ecd9; box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--rust); }
-.linkbtn { display: inline-block; padding: 6px 22px; background: var(--paper); color: var(--fg); text-shadow: none; box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--line); }
+.top .home { display: inline-flex; align-items: center; gap: 10px; padding: 4px 18px 4px 10px; }
+.top .home img { width: 36px; height: 30px; }
+.linkbtn { display: inline-block; padding: 6px 22px; background: var(--paper); color: var(--fg); box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--line); }
 .linkbtn:hover { background: #f3ecd9; box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--rust); }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* 店招：两根链条吊着一块铁牌，牌子是九宫格（sign9.png，边 12 像素），上面是蒸笼和店名 */
-.shop { text-align: center; margin-top: calc(-12px * var(--s)); }   /* 链条从顶栏那一行上面垂下来 */
+/* 第一屏：两根链条吊着一块铁牌（九宫格 sign9.png，边 12 像素），下面站着吉祥物和一句话，底下「往下翻」。占满一屏，项目在下面 */
+.shop { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: calc(-12px * var(--s));
+  min-height: calc(100vh - 60px); min-height: calc(100svh - 60px); padding-bottom: calc(8px * var(--s)); }
 .hang { display: inline-block; position: relative; padding-top: calc(34px * var(--s)); filter: drop-shadow(calc(var(--s) * 3px) calc(var(--s) * 4px) 0 rgba(6, 8, 10, .55)); }
 .hang .chain { position: absolute; top: 0; width: calc(6px * var(--s)); height: calc(40px * var(--s)); background: url(../assets/ui/chain.png) 0 0 / calc(6px * var(--s)) calc(12px * var(--s)) repeat-y; }
 .hang .chain.l { left: calc(22px * var(--s)); } .hang .chain.r { right: calc(22px * var(--s)); }
@@ -54,30 +56,22 @@ a { color: inherit; text-decoration: none; }
   border: calc(12px * var(--s)) solid transparent; border-image: url(../assets/ui/sign9.png) 12 fill round; }
 .sign .steamer { width: calc(48px * var(--s)); height: calc(40px * var(--s)); }
 .sign h1 { font-weight: normal; font-size: 72px; line-height: 1.2; color: var(--paper); text-shadow: 4px 4px 0 #000; letter-spacing: 4px; white-space: nowrap; }
-.shop .tag { color: #efe6d1; font-size: 36px; margin-top: calc(10px * var(--s)); text-shadow: 3px 3px 0 var(--ink); }
+.shop .mid { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: calc(8px * var(--s)) 0; }
+.shop .mascot { width: calc(81px * var(--s)); height: calc(87px * var(--s)); filter: drop-shadow(calc(var(--s) * 3px) calc(var(--s) * 4px) 0 rgba(6, 8, 10, .5)); }
+.shop .tag { color: #efe6d1; font-size: 36px; margin-top: calc(8px * var(--s)); text-shadow: 3px 3px 0 var(--ink); }
 .ph { display: none; }   /* 只在手机上换行 */
+.shop .down { color: #efe6d1; text-shadow: 3px 3px 0 var(--ink); padding: 8px 16px; animation: bob 1.2s steps(2) infinite; }
+@keyframes bob { 50% { transform: translateY(calc(2px * var(--s))); } }
 @media (max-width: 760px) {
-  .shop { margin-top: calc(-10px * var(--s)); }
+  .shop { margin-top: calc(-10px * var(--s)); min-height: calc(100vh - 50px); min-height: calc(100svh - 50px); }
   .hang { padding-top: calc(28px * var(--s)); } .hang .chain { height: calc(34px * var(--s)); }
   .hang .chain.l { left: calc(14px * var(--s)); } .hang .chain.r { right: calc(14px * var(--s)); }
   .sign { gap: calc(3px * var(--s)); padding: calc(3px * var(--s)) calc(5px * var(--s)) calc(3px * var(--s)) calc(3px * var(--s)); }
-  .sign h1 { font-size: 48px; letter-spacing: 2px; text-shadow: 3px 3px 0 #000; }
+  .sign h1 { font-size: 36px; letter-spacing: 2px; text-shadow: 3px 3px 0 #000; }   /* 手机上牌子要放得下 */
+  .top .hname { display: none; }   /* 手机上只留小图标 */
   .shop .tag { font-size: 24px; } .ph { display: inline; }
 }
-
-/* 橱窗：深色展示窗，动物站一排；下面一张海报放游戏里的物品 */
-.window { position: relative; overflow: hidden; height: calc(100px * var(--s)); margin-top: calc(14px * var(--s)); box-shadow: inset 0 0 0 4px var(--ink); background-color: #26323a;
-  background-image: url(../assets/games/ferazoic/chapter1.png); background-size: calc(320px * var(--s)) auto; background-position: center 14%; }
-.window::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(27,24,20,.45), transparent 40%); pointer-events: none; }
-.window .stage { z-index: 1; }
-.window .label { position: absolute; left: 12px; bottom: 12px; z-index: 2; padding: 2px 12px; background: var(--paper); color: var(--fg); box-shadow: inset 0 0 0 3px var(--ink); }
-.shelf { padding: 28px 36px 32px; margin-top: calc(14px * var(--s)); }
-.tiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 20px; margin: 20px auto 0; max-width: calc(4 * 56px * var(--s) + 3 * 20px); }   /* 一行四个 */
-.tile { text-align: center; }
-.tile img { width: calc(56px * var(--s)); height: calc(56px * var(--s)); margin: 0 auto; }
-.tile figcaption { margin-top: 6px; color: var(--dim); }
 .wallh { font-size: 36px; color: #efe6d1; text-shadow: 3px 3px 0 var(--ink); margin-top: calc(16px * var(--s)); }
-@media (max-width: 760px) { .window { height: calc(90px * var(--s)); } .shelf { padding: 20px 16px 24px; } .tiles { gap: 12px 10px; } }
 
 /* 旧海报：撕边 + 影子 + 纸纹 + 胶带 / 图钉 / 卷角 */
 .poster-wrap { position: relative; filter: drop-shadow(calc(var(--s) * 3px) calc(var(--s) * 4px) 0 rgba(6, 8, 10, .55)); }
@@ -94,44 +88,32 @@ a { color: inherit; text-decoration: none; }
 .pin.tl { top: calc(5px * var(--s)); left: calc(5px * var(--s)); }
 .pin.tr { top: calc(5px * var(--s)); right: calc(5px * var(--s)); }
 
-/* 按钮：铁锈橙，和背景分开 */
-.btn { display: inline-block; padding: 10px 24px; background: var(--rust-ink); color: var(--paper); box-shadow: inset 0 0 0 4px var(--ink), inset 0 -10px 0 var(--rust-dark); cursor: pointer; }
-.btn:hover { background: var(--rust-dark); box-shadow: inset 0 0 0 4px var(--ink), inset 0 -10px 0 var(--rust-deep); }
-.btn:active { background: var(--rust-dark); box-shadow: inset 0 0 0 4px var(--ink), inset 0 10px 0 var(--rust-deep); }
+/* 本站默认的按钮：铁锈橙，和背景分开。gbtn 是项目段落里的按钮，默认长一样，各画风再换 */
+.btn, .gbtn { display: inline-block; padding: 10px 24px; background: var(--rust-ink); color: var(--paper); box-shadow: inset 0 0 0 4px var(--ink), inset 0 -10px 0 var(--rust-dark); cursor: pointer; }
+.btn:hover, .gbtn:hover { background: var(--rust-dark); box-shadow: inset 0 0 0 4px var(--ink), inset 0 -10px 0 var(--rust-deep); }
+.btn:active, .gbtn:active { background: var(--rust-dark); box-shadow: inset 0 0 0 4px var(--ink), inset 0 10px 0 var(--rust-deep); }
 .btn.ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 4px var(--line); }
 .btn.ghost:hover { background: rgba(0,0,0,.06); box-shadow: inset 0 0 0 4px var(--fg); }
 /* 还不能下载：不是按钮，只是一句说明，虚框 */
-.soon { display: inline-block; padding: 10px 20px; color: var(--dim); box-shadow: inset 0 0 0 3px var(--line); }
+.soon, .gbtn.off { display: inline-block; padding: 10px 20px; color: var(--dim); background: none; box-shadow: inset 0 0 0 3px var(--line); cursor: default; }
 
 /* 章、标签、分隔线 */
-.stamp { display: inline-block; color: var(--stamp); box-shadow: inset 0 0 0 4px var(--stamp); padding: 2px 14px; background: rgba(233,223,196,.6); transform: rotate(-6deg); }
+.stamp, .status { display: inline-block; color: var(--stamp); box-shadow: inset 0 0 0 4px var(--stamp); padding: 2px 14px; background: rgba(233,223,196,.6); transform: rotate(-6deg); }
 .chip { display: inline-block; padding: 0 10px; box-shadow: inset 0 0 0 4px var(--rust); color: var(--rust-ink); }
 .rule { border-top: 4px dashed var(--rule); margin: 14px 0; }
 .dim { color: var(--dim); }
 .hatch { display: inline-block; width: 120px; height: 20px; vertical-align: middle; background: repeating-linear-gradient(45deg, var(--line) 0 4px, transparent 4px 8px); }
 h2 { font-weight: normal; font-size: 36px; }
 h2 small { font-size: 24px; color: var(--rust-ink); letter-spacing: 6px; white-space: nowrap; }
-h3 { font-weight: normal; font-size: 24px; }
+h3, h4 { font-weight: normal; font-size: 24px; }
 
-/* 首页：作品格子。第一张大，其余小 */
-.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(var(--s) * 14px); margin-top: calc(var(--s) * 6px); align-items: start; }   /* 海报各有各的高，像随手贴的 */
-.card { padding: 22px 24px 24px; min-height: 100%; display: flex; flex-direction: column; }
-.card .cover { position: relative; overflow: hidden; box-shadow: inset 0 0 0 4px var(--ink); background-color: #26323a; height: calc(80px * var(--s)); background-size: calc(320px * var(--s)) auto; background-position: center 14%; }
-.card .cover .stamp { position: absolute; top: 12px; left: 12px; }
-.card .body { padding: 20px 4px 8px; flex: 1; }
-.card .state { margin-top: 4px; color: var(--rust-ink); }
-.card .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.card .blurb { margin-top: 14px; line-height: 1.75; }
-.card .role { margin-top: 10px; color: var(--dim); }
-.card .btns { display: flex; gap: 16px; margin-top: 22px; flex-wrap: wrap; align-items: center; }
+/* 首页下面的两张海报（下一个项目、关于） */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--s) * 14px); margin-top: calc(var(--s) * 14px); align-items: start; }
+.card { padding: 22px 24px 24px; display: flex; flex-direction: column; }
 .card.small { padding: 36px 32px; justify-content: center; }
 .card.small p { margin-top: 4px; line-height: 1.75; }
-@media (max-width: 760px) {
-  .grid { grid-template-columns: 1fr; }
-  .card { padding: 16px; }
-  .card .cover { height: calc(90px * var(--s)); }
-  .card.small { padding: 32px 24px; }
-}
+.btns { display: flex; gap: 16px; margin-top: 22px; flex-wrap: wrap; align-items: center; }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .card { padding: 16px; } .card.small { padding: 32px 24px; } }
 
 /* 动物：精灵图，8 帧循环 */
 .stage { position: absolute; left: 0; right: 0; bottom: 0; height: 100%; }
@@ -142,14 +124,35 @@ h3 { font-weight: normal; font-size: 24px; }
   animation: play var(--dur, 1000ms) steps(8) infinite; }
 @keyframes play { to { background-position-x: calc(var(--fw) * -8 * var(--s) * 1px); } }
 
-/* 游戏介绍页 */
+/* ===== 项目段落（首页）：结构都一样，样子由下面的画风决定 ===== */
+.project { margin-top: calc(8px * var(--s)); }
+.project .inner { max-width: 1440px; margin: 0 auto; padding: calc(10px * var(--s)) calc(24px * var(--s)) calc(16px * var(--s)); }
+@media (max-width: 760px) { .project .inner { padding: 24px 16px 32px; } }
+.window { position: relative; overflow: hidden; height: calc(100px * var(--s)); box-shadow: inset 0 0 0 4px var(--ink); background-color: #26323a;
+  background-size: calc(320px * var(--s)) auto; background-position: center 14%; }
+.window::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(27,24,20,.45), transparent 40%); pointer-events: none; }
+.window .stage { z-index: 1; }
+.window .label { position: absolute; left: 12px; bottom: 12px; z-index: 2; padding: 2px 12px; background: var(--paper); color: var(--fg); box-shadow: inset 0 0 0 3px var(--ink); }
+@media (max-width: 760px) { .window { height: calc(90px * var(--s)); } }
+.panel { margin-top: calc(10px * var(--s)); padding: 28px 36px 32px; color: var(--fg); background: url(../assets/ui/paper.png) 0 0 / calc(192px * var(--s)); box-shadow: inset 0 0 0 4px var(--ink); }
+.phead { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.state { margin-top: 6px; color: var(--rust-ink); }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.blurb { margin-top: 14px; line-height: 1.75; }
+.role { margin-top: 10px; color: var(--dim); }
+.tiles { display: flex; flex-wrap: wrap; gap: 16px 20px; margin-top: 20px; }
+.tile { text-align: center; }
+.tile img { width: calc(56px * var(--s)); height: calc(56px * var(--s)); margin: 0 auto; }
+.tile figcaption { margin-top: 6px; color: var(--dim); }
+@media (max-width: 760px) { .panel { padding: 20px 16px 24px; } .tiles { gap: 12px 10px; justify-content: center; } }
+
+/* 详情页公用：顶图、两栏、玩法、登场动物、场景、下载 */
 .gh { position: relative; height: calc(150px * var(--s)); overflow: hidden; box-shadow: inset 0 0 0 4px var(--ink); background-size: calc(320px * var(--s)) auto; background-position: center 16%; margin-top: calc(var(--s) * 8px); }
 .gh .title { position: absolute; left: calc(8px * var(--s)); bottom: calc(10px * var(--s)); z-index: 2; }
 .gh .title .big { font-weight: normal; font-size: 96px; line-height: 1.1; color: #efe6d1; text-shadow: 6px 6px 0 var(--ink); }
-.gh .stage { left: calc(150px * var(--s)); }   /* 标题占左边，动物在右边排开 */
+.gh .stage { left: calc(150px * var(--s)); z-index: 1; }   /* 标题占左边，动物在右边排开 */
 .gh .title .en { color: #e0b27a; letter-spacing: 12px; text-shadow: 3px 3px 0 var(--ink); }
 .gh::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(27,24,20,.6), transparent 45%); }
-.gh .stage { z-index: 1; }
 @media (max-width: 760px) {
   .gh { height: calc(130px * var(--s)); }
   .gh .title { top: calc(8px * var(--s)); bottom: auto; }   /* 手机上标题放上面，动物在下面 */
@@ -157,27 +160,17 @@ h3 { font-weight: normal; font-size: 24px; }
   .gh .title .en { font-size: 24px; letter-spacing: 6px; }
   .gh .stage { left: 0; }
 }
-.cols { display: grid; grid-template-columns: 3fr 2fr; gap: calc(var(--s) * 14px); margin-top: calc(var(--s) * 14px); align-items: start; }
-.cols .dl-wrap { position: sticky; top: 24px; }   /* 「怎么玩」跟着滚，往下读也看得见 */
-@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } .cols .dl-wrap { order: -1; position: static; } }
+.cols { display: grid; grid-template-columns: 3fr 2fr; gap: calc(var(--s) * 14px); margin-top: calc(var(--s) * 6px); align-items: start; }
+.cols .dl { position: sticky; top: 24px; }   /* 「怎么玩」跟着滚，往下读也看得见 */
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } .cols .dl { order: -1; position: static; } }
 .dl .hot { color: var(--rust-ink); }
-.dl #download { margin-top: 4px; }
-.dlblock { margin-top: 18px; }
-.dlblock .btns { display: flex; flex-wrap: wrap; align-items: center; margin-top: 10px; gap: 12px 16px; }
-.dlblock .ver { flex-basis: 100%; }   /* 版本、大小、日期单独一行 */
-.dlblock .ver:empty { display: none; }
-.notes { margin: 10px 0 0 0; padding-left: 0; list-style: none; }
-.notes li { position: relative; padding-left: 22px; line-height: 1.6; color: var(--fg); }
-.notes li::before { content: ""; position: absolute; left: 2px; top: 13px; width: 10px; height: 10px; background: var(--rust); }   /* 像素方块当项目符号 */
-.intro { padding: 36px 40px 40px; }
 .intro p { margin-top: 12px; line-height: 1.75; }
 .feats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
 .feats div { padding: 14px 18px; box-shadow: inset 0 0 0 4px var(--rule); }
 .feats b { display: block; font-weight: normal; }
 .feats b::before { content: ""; display: inline-block; width: 12px; height: 12px; background: var(--rust); margin-right: 12px; }
 .feats span { color: var(--dim); }
-@media (max-width: 760px) { .feats { grid-template-columns: 1fr; } .intro { padding: 24px 20px; } }
-.dl { padding: 36px 40px 40px; }
+@media (max-width: 760px) { .feats { grid-template-columns: 1fr; } }
 dl { display: grid; grid-template-columns: minmax(96px, max-content) 1fr; column-gap: 12px; row-gap: 6px; }
 dt { color: var(--dim); }
 .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
@@ -187,18 +180,71 @@ dt { color: var(--dim); }
 .roster > div { text-align: center; position: relative; overflow: hidden; height: calc(100px * var(--s)); box-shadow: inset 0 0 0 4px var(--rule); background: rgba(0,0,0,.04); }
 .roster .sprite { left: 50%; margin-left: calc(var(--fw) * var(--s) * -0.5px); bottom: calc(18px * var(--s)); }
 .roster .name { position: absolute; left: 0; right: 0; bottom: 8px; }
-/* 品质色和游戏里一致：蓝 稀有 / 紫 史诗 / 橙 传说，纸上都在 4.5:1 以上 */
+/* 品质色和游戏里一致：蓝 稀有 / 紫 史诗 / 橙 传说 */
 .roster .r-rare { color: #35608c; } .roster .r-epic { color: #6b4489; } .roster .r-legendary { color: var(--rust-ink); }
 @media (max-width: 760px) { .roster { grid-template-columns: repeat(2, 1fr); } }
-.back { margin-top: calc(var(--s) * 14px); display: flex; justify-content: flex-start; gap: 16px; flex-wrap: wrap; }
+.dl #download { margin-top: 4px; }
+.channel { margin-top: 10px; }
+.channel h3 { color: var(--rust-ink); }
+.dlrow { margin-top: 14px; }
+.dlrow .btns { margin-top: 8px; gap: 12px 16px; }
+.dlrow .ver { flex-basis: 100%; color: var(--dim); }   /* 版本、大小、日期单独一行 */
+.dlrow .ver:empty { display: none; }
+.notes { margin: 10px 0 0 0; padding-left: 0; list-style: none; }
+.notes li { position: relative; padding-left: 22px; line-height: 1.6; }
+.notes li::before { content: ""; position: absolute; left: 2px; top: 13px; width: 10px; height: 10px; background: var(--rust); }   /* 像素方块当项目符号 */
+.back { margin-top: calc(var(--s) * 14px); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 
 /* 页脚 */
-.foot { margin-top: calc(var(--s) * 20px); color: #b4c6c4; text-shadow: 2px 2px 0 var(--ink); text-align: center; }
+.foot { margin-top: calc(var(--s) * 20px); padding-bottom: calc(var(--s) * 16px); color: #b4c6c4; text-shadow: 2px 2px 0 var(--ink); text-align: center; }
 
 /* 键盘焦点：切角和撕边会把 outline 裁掉，所以用内描边画焦点框 */
 :focus-visible { outline: 4px solid var(--focus); outline-offset: 2px; }
-.btn:focus-visible, .top a:focus-visible, .linkbtn:focus-visible { outline: none; box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--focus); }
+.btn:focus-visible, .gbtn:focus-visible, .top a:focus-visible, .linkbtn:focus-visible { outline: none; box-shadow: inset 0 0 0 4px var(--ink), inset 0 0 0 8px var(--focus); }
 .btn.ghost:focus-visible { box-shadow: inset 0 0 0 4px var(--focus); }
 
-/* 系统设了「减少动态」：动物停在第一帧 */
-@media (prefers-reduced-motion: reduce) { .sprite { animation: none; } }
+/* 系统设了「减少动态」：动物停在第一帧，「往下翻」不跳 */
+@media (prefers-reduced-motion: reduce) { .sprite, .shop .down { animation: none; } html { scroll-behavior: auto; } }
+
+/* =====================================================================
+   项目画风。每个项目一节 .t-<theme>，换掉面板、按钮、标签、底纹用的图。
+   首页那一段和详情页整页都套这个 class，样子就一致。
+   ===================================================================== */
+
+/* ----- 兽变纪元：游戏里的水泥墙、铁框面板（Art/UI/Parts 的 panel）、军用铁板按钮、军绿铁皮条 ----- */
+.t-ferazoic { --g-text: #f2e8d5; --g-dim: #a89f94; --g-gold: #ffd24a; --g-good: #7cd96a; --g-line: rgba(0, 0, 0, .45); --bs: 2; }   /* bs：按钮放大倍数，和游戏里一样 2 倍 */
+.t-ferazoic .band { color: var(--g-text); background: #1d1b22 url(../assets/games/ferazoic/ui/concrete.png) 0 0 / calc(192px * var(--s)); }
+body.t-ferazoic { background: #1d1b22; }
+.t-ferazoic .panel { color: var(--g-text); background: none; box-shadow: none; padding: 20px 24px 28px;
+  border: calc(9px * var(--s)) solid transparent; border-image: url(../assets/games/ferazoic/ui/panel.png) 9 fill round; }
+.t-ferazoic h2 small, .t-ferazoic .channel h3 { color: #ffa83d; }
+.t-ferazoic .state, .t-ferazoic .dl .hot { color: var(--g-good); }
+.t-ferazoic .role, .t-ferazoic .dim, .t-ferazoic dt, .t-ferazoic .feats span, .t-ferazoic .tile figcaption, .t-ferazoic .dlrow .ver { color: var(--g-dim); }
+.t-ferazoic .rule { border-color: #4a4350; }
+.t-ferazoic .status { color: var(--g-gold); box-shadow: inset 0 0 0 4px var(--g-gold); background: rgba(0,0,0,.35); transform: none; padding: 0 12px; }
+.t-ferazoic .chip { color: var(--g-text); text-shadow: 1px 1px 0 #000; box-shadow: none; height: calc(16px * var(--bs)); line-height: calc(16px * var(--bs)); padding: 0 4px;
+  border-style: solid; border-color: transparent; border-width: 0 calc(9px * var(--bs)) 0 calc(7px * var(--bs)); border-image: url(../assets/games/ferazoic/ui/chip.png) 0 9 0 7 fill repeat; }
+.t-ferazoic .gbtn, .t-ferazoic .gbtn.off { color: var(--g-text); text-shadow: 2px 2px 0 rgba(0,0,0,.6); background: none; box-shadow: none; padding: 0 6px; line-height: calc(16px * var(--bs));
+  border: calc(12px * var(--bs)) solid transparent; border-image: url(../assets/games/ferazoic/ui/button_orange.png) 12 fill round; min-width: calc(60px * var(--bs)); text-align: center; }
+.t-ferazoic .gbtn.ok { border-image-source: url(../assets/games/ferazoic/ui/button_green.png); }
+.t-ferazoic .gbtn.go { border-image-source: url(../assets/games/ferazoic/ui/button_blue.png); }
+.t-ferazoic .gbtn.off { border-image-source: url(../assets/games/ferazoic/ui/button_steel.png); color: var(--g-dim); }
+.t-ferazoic .gbtn:not(.off):hover { filter: brightness(1.15); }
+.t-ferazoic .gbtn:not(.off):active { filter: brightness(.85); }
+.t-ferazoic .gbtn:focus-visible { box-shadow: none; outline: 4px solid var(--g-gold); outline-offset: calc(-8px * var(--bs)); }
+.t-ferazoic .gback, .t-ferazoic .top a.gback { display: inline-block; width: calc(44px * var(--bs)); height: calc(26px * var(--bs)); padding: 0; box-shadow: none; background: url(../assets/games/ferazoic/ui/back.png) 0 0 / 100% 100%; }
+.t-ferazoic .gback:hover { filter: brightness(1.15); }
+.t-ferazoic .top a { background: #3a343e; color: var(--g-text); box-shadow: inset 0 0 0 4px #14121880, inset 0 0 0 8px #4a4350; }
+.t-ferazoic .top a:hover { background: #4a4350; box-shadow: inset 0 0 0 4px #14121880, inset 0 0 0 8px #ffa83d; }
+.t-ferazoic .top .home { background: none; box-shadow: none; padding-left: 0; }
+.t-ferazoic .top .home:hover { background: none; box-shadow: none; color: #ffa83d; }
+.t-ferazoic .feats div { box-shadow: inset 0 0 0 4px var(--g-line); background: rgba(0,0,0,.25); }
+.t-ferazoic .feats b::before { background: var(--g-gold); }
+.t-ferazoic .roster > div { box-shadow: inset 0 0 0 4px var(--g-line); background: rgba(0,0,0,.3); }
+.t-ferazoic .roster .r-rare { color: #6aa6e8; } .t-ferazoic .roster .r-epic { color: #c48bff; } .t-ferazoic .roster .r-legendary { color: #ffa83d; }
+.t-ferazoic .notes li::before { background: var(--g-gold); }
+.t-ferazoic .window .label { background: #2b272f; color: var(--g-text); box-shadow: inset 0 0 0 3px #000; }
+.t-ferazoic .foot { color: var(--g-dim); }
+.t-ferazoic .wallh { color: var(--g-text); }
+.t-ferazoic .tiles { --s: 2; }   /* 首页那一段里的格子按 2 倍放，八个排一行 */
+@media (max-width: 760px) { .t-ferazoic .top .home { display: none; } }   /* 手机上左上角只留返回木牌 */
