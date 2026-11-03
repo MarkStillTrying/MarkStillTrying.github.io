@@ -7,7 +7,7 @@
 - `index.html`：首页。第一屏只有店招、吉祥物和一句话；往下翻是项目，每个项目一段（按 `js/projects.js` 生成，各用各的画风），最后是「下一个项目」和「关于」。
 - **项目画风**：`css/site.css` 最后一节，每个项目一个 `.t-<theme>`（现在只有 `.t-ferazoic`：游戏里的水泥墙、铁框面板、军用铁板按钮、军绿铁皮条、返回木牌，图在 `assets/games/ferazoic/ui/`）。首页那一段和详情页整页都套这个 class。加新项目：在 `projects.js` 加一条、写上 `theme`，再在 css 里加一节 `.t-<theme>` 换掉面板、按钮、底纹用的图。
 - `ferazoic.html`：《兽变纪元》介绍页。
-- `js/projects.js`：**作品列表**。加一款游戏就在这里加一条（字段说明写在文件开头）。下载也写在这里（`downloads`）：安卓指向这个仓库最新 Release 里的 .apk，网页打开时自己去查有没有、显示版本和大小，所以发新版只要在 GitHub 发一个 Release，网站不用改；苹果拿到 TestFlight 公开链接后填进 `ios.url`。
+- `js/projects.js`：**作品列表**。加一款游戏就在这里加一条（字段说明写在文件开头）。下载也写在这里（`downloads`）：安卓指向测试服的「最新安装包」链接（见下面「发安卓新版」）；苹果拿到 TestFlight 公开链接后填进 `ios.url`。
 - `js/site.js`：撕边、动物精灵动画、首页海报的生成。
 - `css/site.css`：样式。`--s` 是像素放大倍数（电脑 3 倍、手机 2 倍）。
 - `assets/ui/`：铁皮墙、旧纸、胶带、卷角、图钉、店招的铁牌和链条、蒸笼（都是代码画的像素图；店招那几张由 `tools/sign.py` 画）。
@@ -19,11 +19,9 @@
 
 ## 发安卓新版
 
-1. 打开仓库页面右边的 **Releases** → **Draft a new release**（或 Create a new release）。
-2. **Choose a tag** 填一个新的版本号（比如 `v0.2`），选 **Create new tag on publish**。
-3. 标题随便写（比如 `v0.2`），把安装包拖进下面的附件框，文件名改成 `ferazoic-android.apk`（固定链接靠这个名字；名字不对网页也能找到，但固定链接会失效）。
-4. 不要勾 **Set as a pre-release**，点 **Publish release**。
-网页会显示最新那个 Release 的版本、大小和日期。
+网站上的安卓按钮指向测试服的「最新安装包」接口 `https://47-243-198-46.sslip.io/api/apk/latest`：服务器永远给它上面最新的一个包。所以在 Unity 里用菜单「兽变纪元 → 打安卓包…」打完包、传到测试服，网站什么都不用改；装着旧版的手机打开游戏时也会自己下载新版。测试服没开跨域，网页读不到版本号和大小，按钮旁边只写死一句「永远是测试服上最新的一版」（`projects.js` 里的 `hint`）。
+
+苹果：拿到 TestFlight 的公开链接后填进 `js/projects.js` 的 `ios.url`，按钮就从「准备中」变成能点的。
 
 ## 本地看
 

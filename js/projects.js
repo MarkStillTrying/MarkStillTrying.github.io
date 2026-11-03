@@ -13,9 +13,11 @@
 //   showcase  首页那一段上面的展示窗：bg 背景图，sprites 站在前面的动物（按顺序排开，站不下的自动藏起来），label 左下角的小牌子，alt 给读屏软件念的
 //   tiles     首页那一段里的小格子（项目里的美术）：img 图，name 名字
 //   downloads 下载，按渠道分（测试服 / 正式服），每个渠道下按平台写（android / ios）。每个平台：
-//               url      下载链接。安卓用 GitHub Release 的固定链接（见下面），苹果填 TestFlight 公开链接；空着就显示「准备中」
-//               release  安卓：去哪个仓库查最新 Release（owner/repo）。网页打开时会查一下：没发过 Release 就显示「准备中」，
-//                        发过就把按钮指到里面的 .apk，并显示版本、大小、日期。以后发新版只要在 GitHub 发 Release，网站不用改
+//               url      下载链接。安卓指向测试服的「最新安装包」接口（/api/apk/latest：服务器永远给它上面最新的一个包，
+//                        发新版不用改网站）；苹果填 TestFlight 公开链接。空着就显示「准备中」
+//               hint     写在按钮旁边的一句话（比如「永远是最新版」）。测试服没开跨域，网页读不到版本号和大小，只能写死一句
+//               release  （可选）安卓去 GitHub 仓库查最新 Release（owner/repo）：没发过显示「准备中」，发过就把按钮指到里面的 .apk、
+//                        显示版本、大小、日期。现在不用：安装包传在测试服上，不发在 GitHub
 //               label    按钮上的字
 //               notes    装的时候要注意的几句话，逐条显示
 //   soon      一个平台都没开放时写的那句话（不写就是「下载还没开放」）
@@ -52,13 +54,15 @@ window.PROJECTS = [
       {
         channel: "测试服",
         android: {
-          url: "https://github.com/MarkStillTrying/MarkStillTrying.github.io/releases/latest/download/ferazoic-android.apk",
-          release: "MarkStillTrying/MarkStillTrying.github.io",
+          url: "https://47-243-198-46.sslip.io/api/apk/latest",
+          hint: "永远是测试服上最新的一版",
           label: "安卓版下载",
           notes: [
+            "用手机自带的浏览器打开这个链接下载，微信里打不开。",
             "下载后打开安装包，手机问「允许安装来自此来源的应用」时选允许。",
-            "更新时直接装新包覆盖，不要先卸载：卸载会丢掉游客账号。",
+            "2026 年 11 月 3 日之前装过的要先卸载再装：签名换了，直接覆盖装不上。卸载前先在游戏里设好账号密码，装好后点「账号登录」能回到原来的号。",
             "第一次打开点「注册账号」。",
+            "以后有新版本，打开游戏时会自己下载、提示安装，不用再回来下载。",
             "测试版，连的是测试服。"
           ]
         },

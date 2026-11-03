@@ -1,4 +1,4 @@
-// 页面上的小零件：撕边、动物精灵、首页的项目段落、下载按钮（查 GitHub Release）。
+// 页面上的小零件：撕边、动物精灵、首页的项目段落、下载按钮（写了 release 的还会去查 GitHub Release）。
 (function () {
   // 固定种子的随机数，同一张海报每次打开撕得一样
   function rng(seed) {
@@ -134,6 +134,7 @@
   function platformButton(d, platName, info) {
     if (!d.url) return el("span", "gbtn off", platName + "版准备中");
     var a = el("a", "gbtn ok", d.label || (platName + "版下载")); a.href = d.url;
+    if (d.hint && info) info.textContent = d.hint;
     if (d.release) latestRelease(d.release, function (rel) {
       if (rel === null) { if (a.parentNode) a.parentNode.replaceChild(el("span", "gbtn off", platName + "版准备中"), a); if (info) info.textContent = ""; return; }
       if (!rel) return;
