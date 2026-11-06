@@ -28,8 +28,8 @@ window.PROJECTS = [
     name: "兽变纪元",
     en: "FERAZOIC",
     status: "开发中",
-    state: "安卓测试版 · 苹果版准备中",
-    platform: "安卓",
+    state: "安卓、苹果都有测试版",
+    platform: "安卓 · 苹果",
     tags: ["城建", "养成", "自动战斗", "多人"],
     blurb: "末日之后，动物们发生了突变。挖一座地下避难所，招募突变动物，在禁区里和其他玩家抢地盘。",
     role: "一个人做：程序、美术、策划、服务器（Unity · C# · ASP.NET Core）",
@@ -67,10 +67,14 @@ window.PROJECTS = [
           ]
         },
         ios: {
-          url: null,
+          url: "https://testflight.apple.com/join/GQC27Q4R",
           label: "苹果版下载（TestFlight）",
           notes: [
-            "先在 App Store 装好 TestFlight，再点链接，按提示安装。"
+            "iPhone、iPad 都能装，系统要 iOS 15 以上。",
+            "先在 App Store 装好免费的 TestFlight，再在手机上点这个按钮，然后在 TestFlight 里点「接受」「安装」。",
+            "第一次打开点「注册账号」。",
+            "小更新打开游戏时会自己下载；有新的测试包时 TestFlight 会提示更新。",
+            "测试版，连的是测试服。"
           ]
         }
       }
