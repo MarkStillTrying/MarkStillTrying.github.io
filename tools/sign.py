@@ -32,30 +32,6 @@ def chain():
     d.line([2, 7, 2, 11], fill=IRON_D); d.line([3, 7, 3, 11], fill=IRON_L)
     im.save(OUT + "chain.png")
 
-def steamer():
-    # 48×40：竹蒸笼，三个包子冒热气
-    im = Image.new("RGBA", (48, 40), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    BAM = (201, 168, 106); BAM_D = (138, 110, 58); BAM_L = (226, 198, 140)
-    BUN = (242, 236, 224); BUN_S = (214, 204, 184); BUN_D = (178, 166, 142)
-    STEAM = (232, 238, 240, 150)
-    # 笼身
-    d.rectangle([4, 24, 43, 36], fill=BAM); d.rectangle([4, 24, 43, 36], outline=BAM_D)
-    d.line([5, 25, 42, 25], fill=BAM_L)
-    for x in range(8, 44, 6): d.line([x, 27, x, 35], fill=BAM_D)              # 竹片
-    d.rectangle([2, 22, 45, 24], fill=BAM_D); d.line([3, 22, 44, 22], fill=BAM_L)   # 笼口的箍
-    d.rectangle([2, 35, 45, 37], fill=BAM_D)                                    # 底箍
-    # 三个包子
-    for cx, cy, rr in [(12, 18, 7), (24, 16, 8), (36, 18, 7)]:
-        d.ellipse([cx - rr, cy - rr + 2, cx + rr, cy + rr], fill=BUN, outline=BUN_D)
-        d.ellipse([cx - rr + 2, cy + 1, cx + rr - 1, cy + rr], fill=BUN_S)
-        d.ellipse([cx - rr, cy - rr + 2, cx + rr, cy + rr], outline=BUN_D)
-        for a in range(5):                                                      # 褶子
-            d.line([cx, cy - 2, cx - 4 + a * 2, cy - rr + 3], fill=BUN_D)
-        d.point((cx, cy - 2), fill=BUN_D)
-    # 热气
-    for x0, y0 in [(10, 2), (23, 0), (36, 2)]:
-        d.line([x0, y0 + 6, x0, y0 + 4], fill=STEAM); d.line([x0 + 1, y0 + 3, x0 + 1, y0 + 2], fill=STEAM)
-        d.line([x0, y0 + 1, x0, y0], fill=STEAM); d.point((x0 + 2, y0 + 4), fill=STEAM)
-    im.save(OUT + "steamer.png")
+# 蒸笼（steamer.png、steamer_nav.png）不在这里画了：是 Mark 给的图，由 tools/steamer.py 缩成像素图。
 
-plate(); chain(); steamer(); print("ok")
+plate(); chain(); print("ok")

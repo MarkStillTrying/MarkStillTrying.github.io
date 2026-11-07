@@ -73,7 +73,7 @@
     });
     function fit() {
       var ms = parseFloat(getComputedStyle(row).getPropertyValue("--ms")) || 1;
-      var gap = 12 * ms, avail = (row.parentNode || row).clientWidth;
+      var gap = 12 * ms, avail = (row.closest("header") || row.parentNode || row).clientWidth;   // 按整个第一屏的宽算，不按那句话的宽
       var w = all.map(function (m) { var img = m.querySelector("img"); return (img ? parseInt(img.getAttribute("width"), 10) : 0) * ms; });
       var lo = 0, hi = all.length, cutLeft = true;
       while (hi - lo > 1) {

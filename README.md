@@ -10,7 +10,7 @@
 - `js/projects.js`：**作品列表**。加一款游戏就在这里加一条（字段说明写在文件开头）。下载也写在这里（`downloads`）：安卓指向测试服的「最新安装包」链接（见下面「发安卓新版」）；苹果是 TestFlight 的公开链接（`ios.url`）。
 - `js/site.js`：撕边、动物精灵动画、首页海报的生成。
 - `css/site.css`：样式。`--s` 是像素放大倍数（电脑 3 倍、手机 2 倍）。
-- `assets/ui/`：铁皮墙、旧纸、胶带、卷角、图钉、店招的铁牌和链条、蒸笼（都是代码画的像素图；店招那几张由 `tools/sign.py` 画）。
+- `assets/ui/`：铁皮墙、旧纸、胶带、卷角、图钉、店招的铁牌和链条（代码画的像素图，店招那几张由 `tools/sign.py` 画）。蒸笼 `steamer.png`（75×75，店招上放大 2 倍）和 `steamer_nav.png`（30×30，左上角）是 Mark 2026-11-07 给的图缩成的像素图：原图在 `tools/src/steamer.png`，`python3 tools/steamer.py` 重新缩。
 - `assets/ui/mascots/`：吉祥物，Mark 画的小笼包（戴王冠的 king、猫脸的 cat、吕布 lvbu），从原图缩回 1 倍像素、去掉背景。网站的图都由 Mark 画，不用代码生成。首页第一屏那一排在 `index.html` 里排（中间放最主要的，放不下时从两头往里藏）；`js/site.js` 的 liveMascots 管藏、翻面（左半边朝右、右半边朝左）、蹦和偶尔转身。
 - `assets/games/ferazoic/tiles/`：首页橱窗里的物品格子，用游戏里的图标和品质框拼的。
 - `assets/games/<游戏>/`：每款游戏的图：背景、截图、动物精灵图。
