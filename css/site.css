@@ -16,6 +16,7 @@
   --wall-text: #d9e1dc;
   --wall-dark: rgba(12, 16, 18, .22);
   --f-body: 18px; --f-lead: 18px; --f-head: 24px; --f-sign: 36px; --f-sign-s: 30px; --f-big: 36px;   /* 手机上的字号（备用值），js/type.js 会换成这台手机上清楚的 */
+  --f-cap: 12px; --f-cap-d: 12px;   /* 物品格子下面的小字（手机 / 电脑），格子的大小跟着它走；也是备用值 */
 }
 @media (max-width: 760px) { :root { --s: 2; } }
 
@@ -163,11 +164,20 @@ h3, h4 { font-weight: normal; font-size: 24px; }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .blurb { margin-top: 14px; line-height: 1.75; }
 .role { margin-top: 10px; color: var(--dim); }
-.tiles { display: flex; flex-wrap: wrap; gap: 16px 20px; margin-top: 20px; }
-.tile { text-align: center; }
-.tile img { width: calc(56px * var(--s)); height: calc(56px * var(--s)); margin: 0 auto; }
-.tile figcaption { margin-top: 6px; color: var(--dim); }
-@media (max-width: 760px) { .panel { padding: 20px 16px 24px; } .tiles { gap: 12px 10px; justify-content: center; } }
+/* 物品格子：电脑上一排八个，手机上一排四个。格子的图是 56×56 的像素图，下面的小字 12 像素一个字，
+   两样用同一个「像素大小」：.tiles 的字号就是小字的字号（--f-cap-d 宽屏、--f-cap 手机和窄窗口，js/type.js 按屏幕密度算），
+   格子宽 56/12 个字。这样小字清楚的时候，图也正好是整数倍放大。
+   一排的格子靠左，中间的空最多 1.5 个字（max-width 就是 8 个格子 + 7 个空），地方不够先缩空，再不够格子跟着缩（minmax），不会撑出面板。 */
+.tiles { display: grid; grid-template-columns: repeat(8, minmax(0, calc(56em / 12))); justify-content: space-between; gap: 1em 4px; max-width: calc(8 * 56em / 12 + 7 * 1.5em); margin-top: 20px; font-size: var(--f-cap-d); }
+.tile { text-align: center; min-width: 0; }
+.tile img { width: 100%; height: auto; aspect-ratio: 1; margin: 0 auto; }
+.tile figcaption { margin: .5em -.75em 0; line-height: 1.5; color: var(--dim); }   /* 名字可以比格子宽一点（两边各多 0.75 个字） */
+@media (max-width: 1000px) { .tiles { font-size: var(--f-cap); } }   /* 窄窗口、竖着的平板：用小的那一档，八个才放得下 */
+@media (max-width: 760px) {
+  .panel { padding: 20px 16px 24px; }
+  /* 手机：四个一排，两头顶到面板的边，中间的空平分（最多 3.4 个字，横着拿手机时不会拉得太开） */
+  .tiles { grid-template-columns: repeat(4, minmax(0, calc(56em / 12))); column-gap: 2px; max-width: calc(4 * 56em / 12 + 3 * 3.4em); }
+}
 
 /* 详情页公用：顶图、两栏、玩法、登场动物、场景、下载 */
 .gh { position: relative; height: calc(150px * var(--s)); overflow: hidden; box-shadow: inset 0 0 0 4px var(--ink); background-size: calc(320px * var(--s)) auto; background-position: center 16%; margin-top: calc(var(--s) * 8px); }
@@ -274,7 +284,6 @@ body.t-ferazoic { background: #1d1b22; }
 .t-ferazoic .window .label { background: #2b272f; color: var(--g-text); box-shadow: inset 0 0 0 3px #000; }
 .t-ferazoic .foot { color: var(--g-dim); }
 .t-ferazoic .wallh { color: var(--g-text); }
-.t-ferazoic .tiles { --s: 2; }   /* 首页那一段里的格子按 2 倍放，八个排一行 */
 @media (max-width: 760px) {
   .t-ferazoic .top .home { display: none; }   /* 手机上左上角只留返回木牌 */
   .t-ferazoic .panel { padding: 14px 10px 20px; }   /* 铁框已经占了 18，里面少留一点，一行能多放几个字 */
