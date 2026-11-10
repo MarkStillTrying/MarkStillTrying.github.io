@@ -16,7 +16,8 @@
   --wall-text: #d9e1dc;
   --wall-dark: rgba(12, 16, 18, .22);
   --f-body: 18px; --f-lead: 18px; --f-head: 24px; --f-sign: 36px; --f-sign-s: 30px; --f-big: 36px;   /* 手机上的字号（备用值），js/type.js 会换成这台手机上清楚的 */
-  --f-cap: 12px; --f-cap-d: 12px;   /* 物品格子下面的小字（手机 / 电脑），格子的大小跟着它走；也是备用值 */
+  --f-cap: 12px; --f-cap-d: 12px;   /* 物品格子下面的小字（手机 / 窗口不够宽的电脑），格子的大小跟着它走；也是备用值 */
+  --dp: 1px;   /* 一个屏幕像素有多宽（高清屏上比 1px 小），js/type.js 按屏幕密度填；要「落在整个屏幕像素上」的地方用它取整 */
 }
 @media (max-width: 760px) { :root { --s: 2; } }
 
@@ -35,7 +36,10 @@ body {
 @media (max-width: 760px) { body { font-size: var(--f-body); } }   /* 手机上正文 16～18 */
 img { image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
 a { color: inherit; text-decoration: none; }
-.page { max-width: 1440px; margin: 0 auto; padding: 0 calc(var(--s) * 24px); }
+/* 居中：窗口比 1440 宽、宽度又是单数时，两边的空会带半个像素，里面的字全落在半个像素上、发虚。
+   所以左边的空往下取到整个屏幕像素（round 是新一点的浏览器才有的写法，老浏览器不认这一句，还是用上面的 auto）。 */
+.page, .project .inner { max-width: 1440px; margin: 0 auto; margin-left: max(0px, round(down, calc((100% - 1440px) / 2), var(--dp))); }
+.page { padding: 0 calc(var(--s) * 24px); }
 @media (max-width: 760px) { .page { padding: 0 16px; } }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .grow { flex: 1; }
@@ -150,7 +154,7 @@ h3, h4 { font-weight: normal; font-size: 24px; }
 
 /* ===== 项目段落（首页）：结构都一样，样子由下面的画风决定 ===== */
 .project { margin-top: calc(8px * var(--s)); }
-.project .inner { max-width: 1440px; margin: 0 auto; padding: calc(10px * var(--s)) calc(24px * var(--s)) calc(16px * var(--s)); }
+.project .inner { padding: calc(10px * var(--s)) calc(24px * var(--s)) calc(16px * var(--s)); }
 @media (max-width: 760px) { .project .inner { padding: 24px 16px 32px; } }
 .window { position: relative; overflow: hidden; height: calc(100px * var(--s)); box-shadow: inset 0 0 0 4px var(--ink); background-color: #26323a;
   background-size: calc(320px * var(--s)) auto; background-position: center 14%; }
@@ -164,19 +168,27 @@ h3, h4 { font-weight: normal; font-size: 24px; }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .blurb { margin-top: 14px; line-height: 1.75; }
 .role { margin-top: 10px; color: var(--dim); }
-/* 物品格子：电脑上一排八个，手机上一排四个。格子的图是 56×56 的像素图，下面的小字 12 像素一个字，
-   两样用同一个「像素大小」：.tiles 的字号就是小字的字号（--f-cap-d 宽屏、--f-cap 手机和窄窗口，js/type.js 按屏幕密度算），
-   格子宽 56/12 个字。这样小字清楚的时候，图也正好是整数倍放大。
-   一排的格子靠左，中间的空最多 1.5 个字（max-width 就是 8 个格子 + 7 个空），地方不够先缩空，再不够格子跟着缩（minmax），不会撑出面板。 */
-.tiles { display: grid; grid-template-columns: repeat(8, minmax(0, calc(56em / 12))); justify-content: space-between; gap: 1em 4px; max-width: calc(8 * 56em / 12 + 7 * 1.5em); margin-top: 20px; font-size: var(--f-cap-d); }
-.tile { text-align: center; min-width: 0; }
+/* 物品格子：电脑上一排八个，手机上一排四个（--n）。格子的图是 56×56 的像素图，下面的小字 12 像素一个字，
+   两样用同一个「像素大小」：.tiles 的字号就是小字的字号，格子宽 56/12 个字（--tile）。这样小字清楚的时候，图也正好是整数倍放大。
+   电脑上格子 112（字号 24）。一排的格子从面板的左边排到右边，中间的空一样大（justify-content: space-between），窗口宽空就大、窗口窄空就小。
+   窗口再窄、八个 112 放不下时换小一档的字号（--f-cap-d、--f-cap，js/type.js 按屏幕密度算），还是八个排满一行；
+   还放不下格子跟着缩（minmax），不会撑出面板。 */
+.tiles { --n: 8; --tile: calc(56em / 12); display: grid; grid-template-columns: repeat(var(--n), minmax(0, var(--tile))); justify-content: space-between; gap: 1em 4px; margin-top: 20px; font-size: 24px;
+  /* 一行的宽度往下凑一点（最多少几个像素），让中间每个空都是整数个屏幕像素：不然格子落在半个像素上，下面的小字会发虚。
+     老浏览器不认 round，这一句不算数，一行还是顶满，只是小字可能虚一点 */
+  width: calc(var(--n) * var(--tile) + round(down, 100% - var(--n) * var(--tile), (var(--n) - 1) * var(--dp))); }
+.tile { text-align: center; min-width: 0; container-type: inline-size; }   /* container-type：让下面的小字能按格子的宽度算字号（cqw） */
 .tile img { width: 100%; height: auto; aspect-ratio: 1; margin: 0 auto; }
 .tile figcaption { margin: .5em -.75em 0; line-height: 1.5; color: var(--dim); }   /* 名字可以比格子宽一点（两边各多 0.75 个字） */
-@media (max-width: 1000px) { .tiles { font-size: var(--f-cap); } }   /* 窄窗口、竖着的平板：用小的那一档，八个才放得下 */
-@media (max-width: 760px) {
-  .panel { padding: 20px 16px 24px; }
-  /* 手机：四个一排，两头顶到面板的边，中间的空平分（最多 3.4 个字，横着拿手机时不会拉得太开） */
-  .tiles { grid-template-columns: repeat(4, minmax(0, calc(56em / 12))); column-gap: 2px; max-width: calc(4 * 56em / 12 + 3 * 3.4em); }
+/* 格子被挤小了（窗口窄、屏幕缩放比例又不凑巧），小字也跟着小：字号最多是格子宽的 12/56，不会叠到旁边的名字上。
+   平时格子没被挤，12/56 正好等于 .tiles 的字号（1em），加的 .05px 是留一点余量，让平时取到的就是 1em、一点不差。 */
+.tile figcaption { font-size: min(1em, calc(100cqw * 12 / 56 + .05px)); }
+@media (max-width: 1199px) { .tiles { font-size: var(--f-cap-d); } }   /* 窗口不够宽，八个 112 放不下：小一档 */
+@media (max-width: 1023px) { .tiles { font-size: var(--f-cap); } }     /* 更窄的窗口、竖着的平板、横着拿的手机：最小的一档 */
+@media (max-width: 760px) { .panel { padding: 20px 16px 24px; } }
+@media (max-width: 567px) {
+  /* 手机竖屏：四个一排，两头顶到面板的边，中间的空平分（最多和格子一样宽，屏幕再宽也不会拉得太开；568 起八个放得下，就排八个） */
+  .tiles { --n: 4; column-gap: 2px; max-width: calc(7 * var(--tile)); }
 }
 
 /* 详情页公用：顶图、两栏、玩法、登场动物、场景、下载 */
