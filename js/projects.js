@@ -36,9 +36,9 @@ window.PROJECTS = [
     page: "ferazoic.html",
     showcase: {
       bg: "assets/games/ferazoic/chapter1.png",
-      sprites: ["mutant_dog", "porcupine", "snapping_turtle", "cobra", "centipede"],
+      sprites: ["tiger", "mantis", "rhino", "dart_frog", "beetle"],
       label: "《兽变纪元》里的突变动物",
-      alt: "废墟城市前站着一排突变动物：突变犬、豪猪、鳄龟、眼镜蛇、变异蜈蚣"
+      alt: "废墟城市前站着一排突变动物：裂爪猛虎、镰刀螳螂、铁甲犀牛、毒雾箭蛙、巨钳锹甲"
     },
     tiles: [
       { img: "assets/games/ferazoic/tiles/nuclear_battery.png", name: "核电池" },
