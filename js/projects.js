@@ -35,7 +35,7 @@ window.PROJECTS = [
     role: "一个人做：程序、美术、策划、服务器（Unity · C# · ASP.NET Core）",
     page: "ferazoic.html",
     showcase: {
-      bg: "assets/games/ferazoic/chapter1.png",
+      bg: "assets/games/ferazoic/backdrop.png",
       sprites: ["tiger", "mantis", "rhino", "dart_frog", "beetle"],
       label: "《兽变纪元》里的突变动物",
       alt: "废墟城市前站着一排突变动物：裂爪猛虎、镰刀螳螂、铁甲犀牛、毒雾箭蛙、巨钳锹甲"

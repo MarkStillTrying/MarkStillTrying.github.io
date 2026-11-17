@@ -159,7 +159,7 @@ h3, h4 { font-weight: normal; font-size: 24px; }
 .project .inner { padding: calc(10px * var(--s)) calc(24px * var(--s)) calc(16px * var(--s)); }
 @media (max-width: 760px) { .project .inner { padding: 24px 16px 32px; } }
 .window { position: relative; overflow: hidden; height: calc(100px * var(--s)); box-shadow: inset 0 0 0 4px var(--ink); background-color: #26323a;
-  background-size: calc(320px * var(--s)) auto; background-position: center 14%; }
+  background-size: cover; background-position: center; }   /* 背景图放多大、露哪一段，各画风自己定（见最后「项目画风」） */
 .window::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(27,24,20,.45), transparent 40%); pointer-events: none; }
 .window .stage { z-index: 1; }
 .window .label { position: absolute; left: 12px; bottom: 12px; z-index: 2; padding: 2px 12px; background: var(--paper); color: var(--fg); box-shadow: inset 0 0 0 3px var(--ink); }
@@ -194,7 +194,7 @@ h3, h4 { font-weight: normal; font-size: 24px; }
 }
 
 /* 详情页公用：顶图、两栏、玩法、登场动物、场景、下载 */
-.gh { position: relative; height: calc(150px * var(--s)); overflow: hidden; box-shadow: inset 0 0 0 4px var(--ink); background-size: calc(320px * var(--s)) auto; background-position: center 16%; margin-top: calc(var(--s) * 8px); }
+.gh { position: relative; height: calc(150px * var(--s)); overflow: hidden; box-shadow: inset 0 0 0 4px var(--ink); background-size: cover; background-position: center; margin-top: calc(var(--s) * 8px); }
 .gh .title { position: absolute; left: calc(8px * var(--s)); bottom: calc(10px * var(--s)); z-index: 2; }
 .gh .title .big { font-weight: normal; font-size: 96px; line-height: 1.1; color: #efe6d1; text-shadow: 6px 6px 0 var(--ink); }
 .gh .stage { left: calc(150px * var(--s)); z-index: 1; }   /* 标题占左边，动物在右边排开 */
@@ -225,7 +225,8 @@ h3, h4 { font-weight: normal; font-size: 24px; }
 dl { display: grid; grid-template-columns: minmax(4em, max-content) 1fr; column-gap: 12px; row-gap: 6px; }
 dt { color: var(--dim); }
 .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
-.shots div { height: calc(60px * var(--s)); background-size: cover; background-position: center 25%; box-shadow: inset 0 0 0 4px var(--ink); }
+/* 场景小图：图是 720×360 的景色，缩小了看，所以用平滑缩放（别的图都是放大的像素图，不平滑）。格子很扁时裁掉上面的天 */
+.shots div { height: calc(60px * var(--s)); background-size: cover; background-position: center 75%; image-rendering: auto; box-shadow: inset 0 0 0 4px var(--ink); }
 @media (max-width: 760px) { .shots { grid-template-columns: 1fr 1fr; } }
 /* 登场动物：一格一只（格子由 tools/sprites.py 生成）。一排几格看放得下几个 --min 宽的格子：电脑上三格，窗口窄一点两格，手机两格。
    --ru 是这里一个美术像素画多大：电脑上 2，格子最窄 170 也放得下最宽的那只（--wmax 个美术像素宽）；
@@ -305,9 +306,23 @@ body.t-ferazoic { background: #1d1b22; }
 .t-ferazoic .roster .r-rare { color: #6aa6e8; } .t-ferazoic .roster .r-epic { color: #c48bff; } .t-ferazoic .roster .r-legendary { color: #ffa83d; }
 .t-ferazoic .notes li::before { background: var(--g-gold); }
 .t-ferazoic .window .label { background: #2b272f; color: var(--g-text); box-shadow: inset 0 0 0 3px #000; }
+/* 展示窗、顶图后面的背景：游戏里第一章的背景截出来的一段（assets/games/ferazoic/backdrop.png，720×340，
+   tools/backdrops.py 从游戏里截的：原图的第 80～419 行）。
+   --bk   背景的一个像素画成几个 CSS 像素：电脑 2、手机 1。动物是 3、2，背景比动物小一号，露出来的景才多；宽度不够时放大到铺满。
+   --row  动物的脚踩在原图的第几行（脚离窗口底 18 个美术像素；截出来的图最下面一行是原图第 419 行，所以式子里是 420）。
+          顶图的标题压在地面上，所以比展示窗多露一点地。
+   左右   写百分比：0% 露最左边、100% 露最右边，窗口多宽都铺得满。手机上往左偏一点，露出那辆车 */
+.t-ferazoic .window, .t-ferazoic .gh { --bk: 2; --row: 345; background-repeat: no-repeat;
+  background-size: max(calc(720px * var(--bk)), 100%) auto;
+  background-position: 50% calc(100% + (420 - var(--row)) * var(--bk) * 1px - 18px * var(--s)); }
+.t-ferazoic .gh { --row: 355; }
 .t-ferazoic .foot { color: var(--g-dim); }
 .t-ferazoic .wallh { color: var(--g-text); }
 @media (max-width: 760px) {
+  .t-ferazoic .window, .t-ferazoic .gh { --bk: 1; background-position-x: 40%; }
+  /* 手机上顶图的标题压在天空和楼上：和游戏里一样，给浅色的字描一圈黑边 */
+  .t-ferazoic .gh .title .big { text-shadow: 3px 3px 0 var(--ink), -2px 0 0 var(--ink), 2px 0 0 var(--ink), 0 -2px 0 var(--ink), 0 2px 0 var(--ink); }
+  .t-ferazoic .gh .title .en { text-shadow: 2px 2px 0 var(--ink), -1px 0 0 var(--ink), 1px 0 0 var(--ink), 0 -1px 0 var(--ink), 0 1px 0 var(--ink); }
   .t-ferazoic .top .home { display: none; }   /* 手机上左上角只留返回木牌 */
   .t-ferazoic .panel { padding: 14px 10px 20px; }   /* 铁框已经占了 18，里面少留一点，一行能多放几个字 */
   /* 字小了，按钮跟着矮：铁框的图还是按 2 倍画（border-image-width），但只占 12 高的位置，字压在框里面的色块上（框本身 10 高） */

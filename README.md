@@ -16,6 +16,7 @@
 - `assets/games/ferazoic/tiles/`：首页橱窗里的物品格子，用游戏里的图标和品质框拼的。
 - `assets/games/<游戏>/`：每款游戏的图：背景、截图、动物精灵图。
 - `tools/sprites.py`：把《兽变纪元》里动物的待机图同步到网站。游戏里换了动物的美术、加了动物，在网站根目录跑一次 `python3 tools/sprites.py <游戏仓库的路径>`（比如 `python3 tools/sprites.py "/Users/cake5031/Game Dev/Ferazoic"`，要先 `pip install pillow numpy`）：它照游戏的动物表把每只的待机精灵图（8 帧横着排）原样复制到 `assets/games/ferazoic/sprites/`，重写 `js/projects.js` 里 `window.SPRITES` 那张表（帧的大小、一圈多少毫秒、身子画在哪几列、脚下面空几行），再重写 `ferazoic.html` 里「登场动物」的名单（游戏里所有的动物，按稀有度从低到高排，名字用游戏里的）。这两段都夹在 `>>>`、`<<<` 两行记号中间，别手改。首页展示窗、详情页顶图站哪几只不归它管，写在 `js/projects.js` 的 `showcase.sprites` 和 `ferazoic.html` 顶图的 `data-sprites` 里（按顺序排开，站不下的自动藏起来）。新名字里有生僻字时再跑一次 `tools/subset_font.py`。
+- `tools/backdrops.py`：把《兽变纪元》的章节背景同步到网站。游戏里换了背景，在网站根目录跑一次 `python3 tools/backdrops.py <游戏仓库的路径>`（要先 `pip install pillow`）。游戏里的章节背景是 720×880 的竖图，整张放上来一张 1 MB 多，所以只截用得着的一段：`assets/games/ferazoic/backdrop.png`（第一章背景的第 80～419 行，原样截，一个像素都不改；首页展示窗、详情页顶图后面用）和 `scene1.jpg`～`scene3.jpg`（前三章背景上面 360 行的景色，详情页「三个章节的场景」的小图，缩小了看，所以存成 JPEG）。背景放多大、动物的脚踩在背景的第几行，写在 `css/site.css` 的「.t-ferazoic .window, .t-ferazoic .gh」那一段：电脑上一个背景像素画成 2 个 CSS 像素、手机上 1 个（动物是 3、2，背景比动物小一号，露出来的景才多）；脚踩在原图第 345 行（顶图是 355 行）。截的行改了，那一段里的 420 要跟着改，脚本会检查。
 - `assets/fonts/`：像素字体 Fusion Pixel（OFL 授权，许可证在旁边）。网页用的是裁过的小字体（只带常用字，156 KB）。
 - `tools/subset_font.py`：裁字体的脚本，整套字体（3.4 MB）在 `tools/font/`。网页里加了生僻字、发现某个字变成了别的字体，就在网站根目录跑一次 `python3 tools/subset_font.py`（要先 `pip install fonttools brotli`）。
 
