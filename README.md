@@ -8,13 +8,14 @@
 - **项目画风**：`css/site.css` 最后一节，每个项目一个 `.t-<theme>`（现在只有 `.t-ferazoic`：游戏里的水泥墙、铁框面板、军用铁板按钮、军绿铁皮条、返回木牌，图在 `assets/games/ferazoic/ui/`）。首页那一段和详情页整页都套这个 class。加新项目：在 `projects.js` 加一条、写上 `theme`，再在 css 里加一节 `.t-<theme>` 换掉面板、按钮、底纹用的图。
 - `ferazoic.html`：《兽变纪元》介绍页。
 - `js/projects.js`：**作品列表**。加一款游戏就在这里加一条（字段说明写在文件开头）。下载也写在这里（`downloads`）：安卓指向测试服的「最新安装包」链接（见下面「发安卓新版」）；苹果是 TestFlight 的公开链接（`ios.url`）。
-- `js/site.js`：撕边、动物精灵动画、首页海报的生成。
+- `js/site.js`：撕边、动物精灵动画（展示窗、顶图里的动物按身子的宽度排开，窗口变了重排）、首页海报的生成。
 - `js/type.js`：手机上的字号。像素字体一个字是 12×12 格，一格正好占整数个屏幕像素时才清楚，而每台手机的屏幕密度不一样，所以这里按这台手机算出清楚的字号（正文 16～18、小标题 24 左右、店招最大 36），写进 `--f-body` 这几个 CSS 变量。想调手机上的字大字小，改这个文件里的 17、20、24、36 这几个数。同一个文件还算首页物品格子的大小（`--f-cap`、`--f-cap-d`）：格子的图和下面的小字用同一个像素大小。电脑上一排八个、格子 112，从面板左边排到右边、中间的空一样大；窗口不够宽（1200 以下）放不下八个 112 时换小一档（普通显示器 56、高清屏 84），还是八个排满一行；手机竖屏一排四个（56～64）。它还把「一个屏幕像素有多宽」写进 `--dp`：格子中间的空、居中版块左边的空都凑成整数个屏幕像素，不然字落在半个像素上会发虚。
 - `css/site.css`：样式。`--s` 是像素放大倍数（电脑 3 倍、手机 2 倍）。字号：电脑上是 12 的倍数（正文 24、小标题 36、店招 72），手机（760 宽以下）用 `js/type.js` 算的那几个变量。
 - `assets/ui/`：铁皮墙、旧纸、胶带、卷角、图钉、店招的铁牌和链条（代码画的像素图，店招那几张由 `tools/sign.py` 画）。蒸笼 `steamer.png`（75×75，店招上放大 2 倍）和 `steamer_nav.png`（30×30，左上角）是 Mark 2026-11-07 给的图缩成的像素图：原图在 `tools/src/steamer.png`，`python3 tools/steamer.py` 重新缩。
 - `assets/ui/mascots/`：吉祥物，Mark 画的小笼包（戴王冠的 king、猫脸的 cat、吕布 lvbu），从原图缩回 1 倍像素、去掉背景。网站的图都由 Mark 画，不用代码生成。首页第一屏那一排在 `index.html` 里排（中间放最主要的，放不下时从两头往里藏）；`js/site.js` 的 liveMascots 管藏、翻面（左半边朝右、右半边朝左）、蹦和偶尔转身。
 - `assets/games/ferazoic/tiles/`：首页橱窗里的物品格子，用游戏里的图标和品质框拼的。
 - `assets/games/<游戏>/`：每款游戏的图：背景、截图、动物精灵图。
+- `tools/sprites.py`：把《兽变纪元》里动物的待机图同步到网站。游戏里换了动物的美术、加了动物，在网站根目录跑一次 `python3 tools/sprites.py <游戏仓库的路径>`（比如 `python3 tools/sprites.py "/Users/cake5031/Game Dev/Ferazoic"`，要先 `pip install pillow numpy`）：它照游戏的动物表把每只的待机精灵图（8 帧横着排）原样复制到 `assets/games/ferazoic/sprites/`，重写 `js/projects.js` 里 `window.SPRITES` 那张表（帧的大小、一圈多少毫秒、身子画在哪几列、脚下面空几行），再重写 `ferazoic.html` 里「登场动物」的名单（游戏里所有的动物，按稀有度从低到高排，名字用游戏里的）。这两段都夹在 `>>>`、`<<<` 两行记号中间，别手改。首页展示窗、详情页顶图站哪几只不归它管，写在 `js/projects.js` 的 `showcase.sprites` 和 `ferazoic.html` 顶图的 `data-sprites` 里（按顺序排开，站不下的自动藏起来）。新名字里有生僻字时再跑一次 `tools/subset_font.py`。
 - `assets/fonts/`：像素字体 Fusion Pixel（OFL 授权，许可证在旁边）。网页用的是裁过的小字体（只带常用字，156 KB）。
 - `tools/subset_font.py`：裁字体的脚本，整套字体（3.4 MB）在 `tools/font/`。网页里加了生僻字、发现某个字变成了别的字体，就在网站根目录跑一次 `python3 tools/subset_font.py`（要先 `pip install fonttools brotli`）。
 

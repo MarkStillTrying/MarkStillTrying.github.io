@@ -143,14 +143,16 @@ h3, h4 { font-weight: normal; font-size: 24px; }
 .btns { display: flex; gap: 16px; margin-top: 22px; flex-wrap: wrap; align-items: center; }
 @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .card { padding: 16px; } .card.small { padding: 32px 24px; } }
 
-/* 动物：精灵图，8 帧循环 */
+/* 动物：精灵图，8 帧循环。--u 是一个美术像素画多大；动物踩的那条线离舞台底 18 个美术像素，
+   --foot 是这张图里脚下面还空着几行（减掉它，每只都踩在同一条线上）。左右站哪由 js/site.js 的 layoutStage 排 */
 .stage { position: absolute; left: 0; right: 0; bottom: 0; height: 100%; }
-.sprite { position: absolute; bottom: calc(var(--y, 6) * var(--s) * 1px); left: calc(var(--x, 0) * var(--s) * 1px);
-  width: calc(var(--fw) * var(--s) * 1px); height: calc(var(--fh) * var(--s) * 1px);
+.sprite { --u: calc(var(--s) * 1px);
+  position: absolute; left: 0; bottom: calc((18 - var(--foot, 12)) * var(--u));
+  width: calc(var(--fw) * var(--u)); height: calc(var(--fh) * var(--u));
   background-repeat: no-repeat;
-  background-size: calc(var(--fw) * 8 * var(--s) * 1px) calc(var(--fh) * var(--s) * 1px);
+  background-size: calc(var(--fw) * 8 * var(--u)) calc(var(--fh) * var(--u));
   animation: play var(--dur, 1000ms) steps(8) infinite; }
-@keyframes play { to { background-position-x: calc(var(--fw) * -8 * var(--s) * 1px); } }
+@keyframes play { to { background-position-x: calc(var(--fw) * -8 * var(--u)); } }
 
 /* ===== 项目段落（首页）：结构都一样，样子由下面的画风决定 ===== */
 .project { margin-top: calc(8px * var(--s)); }
@@ -225,13 +227,22 @@ dt { color: var(--dim); }
 .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
 .shots div { height: calc(60px * var(--s)); background-size: cover; background-position: center 25%; box-shadow: inset 0 0 0 4px var(--ink); }
 @media (max-width: 760px) { .shots { grid-template-columns: 1fr 1fr; } }
-.roster { --s: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }   /* 动物按 2 倍放，格子才装得下 */
-.roster > div { text-align: center; position: relative; overflow: hidden; height: calc(100px * var(--s)); box-shadow: inset 0 0 0 4px var(--rule); background: rgba(0,0,0,.04); }
-.roster .sprite { left: 50%; margin-left: calc(var(--fw) * var(--s) * -0.5px); bottom: calc(18px * var(--s)); }
+/* 登场动物：一格一只（格子由 tools/sprites.py 生成）。一排几格看放得下几个 --min 宽的格子：电脑上三格，窗口窄一点两格，手机两格。
+   --ru 是这里一个美术像素画多大：电脑上 2，格子最窄 170 也放得下最宽的那只（--wmax 个美术像素宽）；
+   手机上格子窄，按格子的宽缩小，而且缩成整数个屏幕像素（--dp），图才清楚。
+   格子的高 = 上面留 4 + 一帧里脚以上的 68 行 + 脚到名字留 8 行 + 名字一行 + 下面留 8 */
+.roster { --min: 170px; --gap: 16px; --wmax: 80; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr)); gap: var(--gap); margin-top: 20px; }
+.roster > div { text-align: center; position: relative; overflow: hidden; container-type: inline-size; box-shadow: inset 0 0 0 4px var(--rule); background: rgba(0,0,0,.04); }
+.roster .stage { --ru: 2px; position: relative; height: calc(76 * var(--ru) + 12px + 1.5em); }
+.roster .sprite { --u: var(--ru); left: 50%; margin-left: calc(var(--cx, 56) * var(--u) * -1); bottom: calc(8px + 1.5em - (var(--foot, 12) - 8) * var(--u)); }   /* 身子的正中间（--cx）对准格子正中间 */
 .roster .name { position: absolute; left: 0; right: 0; bottom: 8px; }
 /* 品质色和游戏里一致：蓝 稀有 / 紫 史诗 / 橙 传说 */
 .roster .r-rare { color: #35608c; } .roster .r-epic { color: #6b4489; } .roster .r-legendary { color: var(--rust-ink); }
-@media (max-width: 760px) { .roster { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 760px) { .roster { --min: 120px; --gap: 8px; } .roster .stage { --ru: 1.5px; } }
+@media (max-width: 350px) { .roster { --min: 100px; } .roster .stage { --ru: 1px; } }   /* 320 宽的小手机也排两格 */
+@supports (width: round(down, 1cqw, 1px)) {
+  @media (max-width: 760px) { .roster .stage { --ru: clamp(var(--dp), round(down, calc((100cqw - 8px) / var(--wmax)), var(--dp)), 2px); } }
+}
 .dl #download { margin-top: 4px; }
 .channel { margin-top: 10px; }
 .channel h3 { color: var(--rust-ink); }

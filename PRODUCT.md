@@ -51,7 +51,7 @@ web
 
 ## Evidence on Hand
 
-- 《兽变纪元》的章节背景、五只动物的待机精灵图（`assets/games/ferazoic/`），来自游戏工程。
+- 《兽变纪元》的章节背景、十三只动物的待机精灵图（`assets/games/ferazoic/`），来自游戏工程。动物的图用 `tools/sprites.py` 从游戏仓库同步（2026-11-17 换成游戏里 11-12 翻新的美术，并加上后来新做的八只）。
 - 还没有：游戏的真实截图（现在用章节背景占位）、其他项目。项目介绍和「关于」正文是 Claude 按仓库和设计文档写的实话，等 Mark 改成自己的话。不要编造这些。
 
 ## Product Principles

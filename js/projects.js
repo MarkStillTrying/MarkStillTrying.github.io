@@ -83,11 +83,24 @@ window.PROJECTS = [
   }
 ];
 
-// 动物的精灵图：帧宽高（1 倍像素）、8 帧一圈要多少毫秒。和游戏里的 anim.json 一致。
+// 动物的精灵图（8 帧横着排）。这张表由 tools/sprites.py 照着游戏工程生成，别手改：
+//   fw, fh  一帧的宽高（1 倍像素）      dur   8 帧一圈要多少毫秒
+//   x0, x1  身子画在第几列到第几列（八帧叠在一起量的；排位置、居中都按它，不按整帧）
+//   foot    脚下面还空着几行（减掉它，每只都踩在同一条线上）
+// >>> sprites
 window.SPRITES = {
-  mutant_dog:      { fw: 64,  fh: 64, dur: 880,  sheet: "assets/games/ferazoic/sprites/mutant_dog_idle.png" },
-  porcupine:       { fw: 112, fh: 80, dur: 1000, sheet: "assets/games/ferazoic/sprites/porcupine_idle.png" },
-  snapping_turtle: { fw: 112, fh: 80, dur: 1120, sheet: "assets/games/ferazoic/sprites/snapping_turtle_idle.png" },
-  cobra:           { fw: 112, fh: 80, dur: 1040, sheet: "assets/games/ferazoic/sprites/cobra_idle.png" },
-  centipede:       { fw: 112, fh: 80, dur: 1040, sheet: "assets/games/ferazoic/sprites/centipede_idle.png" }
+  mutant_dog:      { fw: 112, fh: 80, dur: 880, x0: 24, x1: 82, foot: 12, sheet: "assets/games/ferazoic/sprites/mutant_dog_idle.png" },
+  snapping_turtle: { fw: 112, fh: 80, dur: 1440, x0: 17, x1: 81, foot: 12, sheet: "assets/games/ferazoic/sprites/snapping_turtle_idle.png" },
+  centipede:       { fw: 112, fh: 80, dur: 1040, x0: 3, x1: 82, foot: 12, sheet: "assets/games/ferazoic/sprites/centipede_idle.png" },
+  cobra:           { fw: 112, fh: 80, dur: 1040, x0: 17, x1: 68, foot: 12, sheet: "assets/games/ferazoic/sprites/cobra_idle.png" },
+  porcupine:       { fw: 112, fh: 80, dur: 1000, x0: 16, x1: 81, foot: 12, sheet: "assets/games/ferazoic/sprites/porcupine_idle.png" },
+  tiger:           { fw: 112, fh: 80, dur: 1040, x0: 10, x1: 79, foot: 12, sheet: "assets/games/ferazoic/sprites/tiger_idle.png" },
+  dart_frog:       { fw: 112, fh: 80, dur: 1040, x0: 19, x1: 76, foot: 12, sheet: "assets/games/ferazoic/sprites/dart_frog_idle.png" },
+  rhino:           { fw: 112, fh: 80, dur: 1040, x0: 22, x1: 94, foot: 12, sheet: "assets/games/ferazoic/sprites/rhino_idle.png" },
+  axolotl:         { fw: 112, fh: 80, dur: 1040, x0: 6, x1: 80, foot: 12, sheet: "assets/games/ferazoic/sprites/axolotl_idle.png" },
+  mantis:          { fw: 112, fh: 80, dur: 1040, x0: 23, x1: 90, foot: 12, sheet: "assets/games/ferazoic/sprites/mantis_idle.png" },
+  chameleon:       { fw: 112, fh: 80, dur: 1040, x0: 13, x1: 87, foot: 12, sheet: "assets/games/ferazoic/sprites/chameleon_idle.png" },
+  falcon:          { fw: 112, fh: 80, dur: 1040, x0: 17, x1: 67, foot: 12, sheet: "assets/games/ferazoic/sprites/falcon_idle.png" },
+  beetle:          { fw: 112, fh: 80, dur: 1040, x0: 20, x1: 95, foot: 12, sheet: "assets/games/ferazoic/sprites/beetle_idle.png" }
 };
+// <<< sprites

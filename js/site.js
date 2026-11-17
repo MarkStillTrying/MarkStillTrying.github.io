@@ -32,30 +32,37 @@
     parts.forEach(function (cls) { var i = document.createElement("i"); i.className = cls; wrap.appendChild(i); });
   }
 
-  // 一只会动的动物
+  // 一只会动的动物（展示窗、顶图里的；详情页「登场动物」的格子直接写在网页里，由 tools/sprites.py 生成）
   function sprite(unit) {
     var s = window.SPRITES[unit]; if (!s) return null;
     var el = document.createElement("i");
     el.className = "sprite"; el.setAttribute("aria-hidden", "true");
-    el.style.setProperty("--fw", s.fw); el.style.setProperty("--fh", s.fh);
+    el.style.setProperty("--fw", s.fw); el.style.setProperty("--fh", s.fh); el.style.setProperty("--foot", s.foot);
     el.style.setProperty("--dur", s.dur + "ms"); el.style.backgroundImage = "url(" + s.sheet + ")";   // 直接写在元素上，变量里的 url 会按 css 文件的位置找
-    el.dataset.fw = s.fw;
+    el.dataset.x0 = s.x0; el.dataset.w = s.x1 - s.x0 + 1;   // 身子从第几列画起、有多宽（一帧 112 宽，身子只占中间一段）
     return el;
   }
 
-  // 把舞台上的动物排开：按舞台现在的宽度，一只占 72 像素（× 倍数）的位置，居中站成一排；站不下的藏起来。
-  // 展示窗的宽度随屏幕变，所以位置不能写死，窗口一变就重排。
+  // 把舞台上的动物排开：按身子的宽度一只一只排，两只之间、离两边的空一样大，居中站成一排；站不下的藏起来。
+  // 展示窗的宽度随屏幕变，所以位置不能写死，窗口一变就重排。数都按美术像素算，最后乘上放大倍数。
+  var GAP = 10, EDGE = 8, GAP_MAX = 24;   // 两只之间至少隔 10、离两边至少 8 才算站得下；舞台很宽时两只之间最多隔 24
   function layoutStage(stage) {
     var s = parseFloat(getComputedStyle(stage).getPropertyValue("--s")) || 3;
     var kids = stage.querySelectorAll(".sprite"); if (!kids.length) return;
-    var W = stage.clientWidth, slot = 72 * s, show = Math.max(1, Math.min(kids.length, Math.floor(W / slot)));
-    for (var i = 0; i < kids.length; i++) {
+    var W = Math.floor(stage.clientWidth / s), show = 0, sum = 0, i;
+    for (i = 0; i < kids.length; i++) {
+      var w = +kids[i].dataset.w;
+      if (show && sum + w + GAP * show + EDGE * 2 > W) break;   // 至少站一只
+      sum += w; show++;
+    }
+    var gap = Math.min(GAP_MAX, (W - sum) / (show + 1));
+    var x = (W - sum - gap * (show - 1)) / 2;   // 第一只身子的左边
+    for (i = 0; i < kids.length; i++) {
       var el = kids[i];
       if (i >= show) { el.style.display = "none"; continue; }
       el.style.display = "";
-      var fw = (+el.dataset.fw || 112) * s;
-      var x = Math.round(W / 2 + (i - (show - 1) / 2) * slot - fw / 2);
-      el.style.left = Math.round(x / s) * s + "px";   // 对齐到整像素，图才清楚
+      el.style.left = Math.round(x - el.dataset.x0) * s + "px";   // 对齐到整个美术像素，图才清楚
+      x += +el.dataset.w + gap;
     }
   }
   function layoutAllStages() { Array.prototype.forEach.call(document.querySelectorAll(".stage[data-auto]"), layoutStage); }

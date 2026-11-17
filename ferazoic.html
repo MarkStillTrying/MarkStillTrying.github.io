@@ -23,7 +23,7 @@
 
   <main>
     <!-- 顶图：章节背景 + 会动的动物 -->
-    <header class="gh" style="background-image:url(assets/games/ferazoic/chapter1.png)" role="img" aria-label="废墟城市前站着五只突变动物">
+    <header class="gh" style="background-image:url(assets/games/ferazoic/chapter1.png)" role="img" aria-label="废墟城市前站着几只突变动物">
       <div class="stage" data-sprites="mutant_dog,porcupine,snapping_turtle,cobra,centipede" data-auto></div>
       <div class="title"><h1 class="big">兽变纪元</h1><div class="en">FERAZOIC</div></div>
     </header>
@@ -42,13 +42,23 @@
           <div><b>禁区大地图</b><span>打野怪、采资源、打城、侦查</span></div>
         </div>
         <h3 style="margin-top:28px">登场动物</h3>
-        <div class="roster" role="list">
-          <div role="listitem"><div class="stage" data-sprites="mutant_dog" aria-hidden="true"></div><div class="name r-rare">突变犬</div></div>
-          <div role="listitem"><div class="stage" data-sprites="snapping_turtle" aria-hidden="true"></div><div class="name r-rare">鳄龟</div></div>
-          <div role="listitem"><div class="stage" data-sprites="centipede" aria-hidden="true"></div><div class="name r-epic">变异蜈蚣</div></div>
-          <div role="listitem"><div class="stage" data-sprites="cobra" aria-hidden="true"></div><div class="name r-legendary">眼镜蛇</div></div>
-          <div role="listitem"><div class="stage" data-sprites="porcupine" aria-hidden="true"></div><div class="name r-legendary">豪猪</div></div>
+        <!-- >>> roster：这一段由 tools/sprites.py 照着游戏工程生成，别手改 -->
+        <div class="roster" role="list" style="--wmax:80">
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:53;--dur:880ms;background-image:url(assets/games/ferazoic/sprites/mutant_dog_idle.png)"></i></div><div class="name r-rare">突变犬</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:49;--dur:1440ms;background-image:url(assets/games/ferazoic/sprites/snapping_turtle_idle.png)"></i></div><div class="name r-rare">鳄龟</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:58;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/beetle_idle.png)"></i></div><div class="name r-rare">巨钳锹甲</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:43;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/centipede_idle.png)"></i></div><div class="name r-epic">变异蜈蚣</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:45;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/tiger_idle.png)"></i></div><div class="name r-epic">裂爪猛虎</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:50;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/chameleon_idle.png)"></i></div><div class="name r-epic">幽影变色龙</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:42;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/falcon_idle.png)"></i></div><div class="name r-epic">钢羽猎隼</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:43;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/cobra_idle.png)"></i></div><div class="name r-legendary">眼镜蛇</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:49;--dur:1000ms;background-image:url(assets/games/ferazoic/sprites/porcupine_idle.png)"></i></div><div class="name r-legendary">豪猪</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:48;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/dart_frog_idle.png)"></i></div><div class="name r-legendary">毒雾箭蛙</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:58;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/rhino_idle.png)"></i></div><div class="name r-legendary">铁甲犀牛</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:43;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/axolotl_idle.png)"></i></div><div class="name r-legendary">再生美西螈</div></div>
+          <div role="listitem"><div class="stage" aria-hidden="true"><i class="sprite" style="--fw:112;--fh:80;--foot:12;--cx:57;--dur:1040ms;background-image:url(assets/games/ferazoic/sprites/mantis_idle.png)"></i></div><div class="name r-legendary">镰刀螳螂</div></div>
         </div>
+        <!-- <<< roster -->
         <h3 style="margin-top:28px">三个章节的场景</h3>
         <div class="shots">
           <div role="img" aria-label="第一章 废墟边缘" style="background-image:url(assets/games/ferazoic/chapter1.png)"></div>
@@ -57,7 +67,7 @@
         </div>
         <p class="dim" style="margin-top:8px">废墟边缘 · 毒雾沼泽 · 辐射荒原</p>
         <h3 style="margin-top:28px">我做了什么</h3>
-        <p>从程序、美术、策划到服务器，都是我一个人做的：Unity（C#）做客户端，ASP.NET Core 做服务器，战斗在服务器结算、手机只播放战报；动物是逐像素画的。</p>
+        <p>从程序、美术、策划到服务器，都是我一个人做的：Unity（C#）做客户端，ASP.NET Core 做服务器，战斗在服务器结算、手机只播放战报。</p>
       </div>
 
       <div class="panel dl">
