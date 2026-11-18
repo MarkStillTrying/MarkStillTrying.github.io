@@ -5,7 +5,7 @@
 ## 文件
 
 - `index.html`：首页。第一屏只有店招、吉祥物和一句话；往下翻是项目，每个项目一段（按 `js/projects.js` 生成，各用各的画风），最后是「下一个项目」和「关于」。
-- **项目画风**：`css/site.css` 最后一节，每个项目一个 `.t-<theme>`（现在只有 `.t-ferazoic`：游戏里的水泥墙、铁框面板、军用铁板按钮、军绿铁皮条、返回木牌，图在 `assets/games/ferazoic/ui/`）。首页那一段和详情页整页都套这个 class。加新项目：在 `projects.js` 加一条、写上 `theme`，再在 css 里加一节 `.t-<theme>` 换掉面板、按钮、底纹用的图。
+- **项目画风**：`css/site.css` 最后一节，每个项目一个 `.t-<theme>`（现在只有 `.t-ferazoic`：游戏里现在用的水泥墙、铁框面板、铁板按钮、数量条、返回木牌，图在 `assets/games/ferazoic/ui/`，用 `tools/gameui.py` 从游戏里同步）。首页那一段和详情页整页都套这个 class。加新项目：在 `projects.js` 加一条、写上 `theme`，再在 css 里加一节 `.t-<theme>` 换掉面板、按钮、底纹用的图。
 - `ferazoic.html`：《兽变纪元》介绍页。
 - `js/projects.js`：**作品列表**。加一款游戏就在这里加一条（字段说明写在文件开头）。下载也写在这里（`downloads`）：安卓指向测试服的「最新安装包」链接（见下面「发安卓新版」）；苹果是 TestFlight 的公开链接（`ios.url`）。
 - `js/site.js`：撕边、动物精灵动画（展示窗、顶图里的动物按身子的宽度排开，窗口变了重排）、首页海报的生成。
@@ -17,6 +17,7 @@
 - `assets/games/<游戏>/`：每款游戏的图：背景、截图、动物精灵图。
 - `tools/sprites.py`：把《兽变纪元》里动物的待机图同步到网站。游戏里换了动物的美术、加了动物，在网站根目录跑一次 `python3 tools/sprites.py <游戏仓库的路径>`（比如 `python3 tools/sprites.py "/Users/cake5031/Game Dev/Ferazoic"`，要先 `pip install pillow numpy`）：它照游戏的动物表把每只的待机精灵图（8 帧横着排）原样复制到 `assets/games/ferazoic/sprites/`，重写 `js/projects.js` 里 `window.SPRITES` 那张表（帧的大小、一圈多少毫秒、身子画在哪几列、脚下面空几行），再重写 `ferazoic.html` 里「登场动物」的名单（游戏里所有的动物，按稀有度从低到高排，名字用游戏里的）。这两段都夹在 `>>>`、`<<<` 两行记号中间，别手改。首页展示窗、详情页顶图站哪几只不归它管，写在 `js/projects.js` 的 `showcase.sprites` 和 `ferazoic.html` 顶图的 `data-sprites` 里（按顺序排开，站不下的自动藏起来）。新名字里有生僻字时再跑一次 `tools/subset_font.py`。
 - `tools/backdrops.py`：把《兽变纪元》的章节背景同步到网站。游戏里换了背景，在网站根目录跑一次 `python3 tools/backdrops.py <游戏仓库的路径>`（要先 `pip install pillow`）。游戏里的章节背景是 720×880 的竖图，整张放上来一张 1 MB 多，所以只截用得着的一段：`assets/games/ferazoic/backdrop.png`（第一章背景的第 80～419 行，原样截，一个像素都不改；首页展示窗、详情页顶图后面用）和 `scene1.jpg`～`scene3.jpg`（前三章背景上面 360 行的景色，详情页「三个章节的场景」的小图，缩小了看，所以存成 JPEG）。背景放多大、动物的脚踩在背景的第几行，写在 `css/site.css` 的「.t-ferazoic .window, .t-ferazoic .gh」那一段：电脑上一个背景像素画成 2 个 CSS 像素、手机上 1 个（动物是 3、2，背景比动物小一号，露出来的景才多）；脚踩在原图第 345 行（顶图是 355 行）。截的行改了，那一段里的 420 要跟着改，脚本会检查。
+- `tools/gameui.py`：把《兽变纪元》的界面零件同步到网站。游戏里换了这些图，在网站根目录跑一次 `python3 tools/gameui.py <游戏仓库的路径>`（要先 `pip install pillow`）：水泥墙 `concrete.png`、数量条 `chip.png`（网站上当标签的底）、返回木牌 `back.png`、四种铁板按钮 `button_*.png` 原样复制到 `assets/games/ferazoic/ui/`；铁框面板 `panel.png` 游戏里是两张叠起来的（灰度的底乘上面板的颜色、上面盖铁框），网页的九宫格只能用一张图，所以照游戏的做法叠成一张（面板的颜色从游戏代码的 `GameColors.Panel` 读）。图多大、九宫格的边多宽，`css/site.css` 的「兽变纪元」那一节写着同样的数：电脑上水泥墙和面板的铁框一个像素画成 2 个 CSS 像素（和游戏里一样），手机上 1 个；数量条和返回木牌按原大画。游戏里改了图的大小、九宫格的边，脚本会停下来说哪里对不上。
 - `assets/fonts/`：像素字体 Fusion Pixel（OFL 授权，许可证在旁边）。网页用的是裁过的小字体（只带常用字，156 KB）。
 - `tools/subset_font.py`：裁字体的脚本，整套字体（3.4 MB）在 `tools/font/`。网页里加了生僻字、发现某个字变成了别的字体，就在网站根目录跑一次 `python3 tools/subset_font.py`（要先 `pip install fonttools brotli`）。
 

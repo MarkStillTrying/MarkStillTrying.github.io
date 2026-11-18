@@ -273,19 +273,23 @@ dt { color: var(--dim); }
    首页那一段和详情页整页都套这个 class，样子就一致。
    ===================================================================== */
 
-/* ----- 兽变纪元：游戏里的水泥墙、铁框面板（Art/UI/Parts 的 panel）、军用铁板按钮、军绿铁皮条 ----- */
-.t-ferazoic { --g-text: #f2e8d5; --g-dim: #a89f94; --g-gold: #ffd24a; --g-good: #7cd96a; --g-line: rgba(0, 0, 0, .45); --bs: 2; }   /* bs：按钮放大倍数，和游戏里一样 2 倍 */
-.t-ferazoic .band { color: var(--g-text); background: #1d1b22 url(../assets/games/ferazoic/ui/concrete.png) 0 0 / calc(192px * var(--s)); }
-body.t-ferazoic { background: #1d1b22; }
+/* ----- 兽变纪元：游戏里现在用的水泥墙、铁框面板、铁板按钮、数量条、返回木牌（tools/gameui.py 从游戏里同步过来的） -----
+   --bs  按钮的一个像素画成几个 CSS 像素：2，和游戏里一样。
+   --gu  水泥墙、面板铁框的一个像素画成几个 CSS 像素：电脑 2，和游戏里一样；手机 1（手机上网页比游戏放得大，1 倍看着才和游戏里差不多，铁框也不占地方）。
+   数量条（网站上当标签的底）和返回木牌按原大画（1 个像素 1 个 CSS 像素）：游戏里是 2 倍，可网站上的字比游戏里小。
+   图的大小、九宫格的边和 tools/gameui.py 里写的是同样的数，改一边另一边要跟着改（那个脚本会检查）。 */
+.t-ferazoic { --g-text: #f2e8d5; --g-dim: #a89f94; --g-gold: #ffd24a; --g-good: #7cd96a; --g-line: rgba(0, 0, 0, .45); --bs: 2; --gu: 2; }
+.t-ferazoic .band { color: var(--g-text); background: #7f7a73 url(../assets/games/ferazoic/ui/concrete.png) 0 0 / calc(288px * var(--gu)); }   /* 底色是水泥墙的平均色：图还没下载好时不闪 */
+body.t-ferazoic { background: #7f7a73; }
 .t-ferazoic .panel { color: var(--g-text); background: none; box-shadow: none; padding: 20px 24px 28px;
-  border: calc(9px * var(--s)) solid transparent; border-image: url(../assets/games/ferazoic/ui/panel.png) 9 fill round; }
+  border: calc(14px * var(--gu)) solid transparent; border-image: url(../assets/games/ferazoic/ui/panel.png) 14 fill round; }
 .t-ferazoic h2 small, .t-ferazoic .channel h3 { color: #ffa83d; }
 .t-ferazoic .state, .t-ferazoic .dl .hot { color: var(--g-good); }
 .t-ferazoic .role, .t-ferazoic .dim, .t-ferazoic dt, .t-ferazoic .feats span, .t-ferazoic .tile figcaption, .t-ferazoic .dlrow .ver { color: var(--g-dim); }
 .t-ferazoic .rule { border-color: #4a4350; }
 .t-ferazoic .status { color: var(--g-gold); box-shadow: inset 0 0 0 4px var(--g-gold); background: rgba(0,0,0,.35); transform: none; padding: 0 12px; }
-.t-ferazoic .chip { color: var(--g-text); text-shadow: 1px 1px 0 #000; box-shadow: none; height: calc(16px * var(--bs)); line-height: calc(16px * var(--bs)); padding: 0 4px;
-  border-style: solid; border-color: transparent; border-width: 0 calc(9px * var(--bs)) 0 calc(7px * var(--bs)); border-image: url(../assets/games/ferazoic/ui/chip.png) 0 9 0 7 fill repeat; }
+.t-ferazoic .chip { color: var(--g-text); text-shadow: 1px 1px 0 #000; box-shadow: none; height: 32px; line-height: 32px; padding: 0 2px 0 6px;   /* 字压在中间深色的槽里：槽比两头的铁皮各宽出 2、6 */
+  border-style: solid; border-color: transparent; border-width: 0 18px 0 14px; border-image: url(../assets/games/ferazoic/ui/chip.png) 0 18 0 14 fill repeat; }
 .t-ferazoic .gbtn, .t-ferazoic .gbtn.off { color: var(--g-text); text-shadow: 2px 2px 0 rgba(0,0,0,.6); background: none; box-shadow: none; padding: 0 6px; line-height: calc(16px * var(--bs));
   border: calc(12px * var(--bs)) solid transparent; border-image: url(../assets/games/ferazoic/ui/button_orange.png) 12 fill round; min-width: calc(60px * var(--bs)); text-align: center; }
 .t-ferazoic .gbtn.ok { border-image-source: url(../assets/games/ferazoic/ui/button_green.png); }
@@ -294,11 +298,13 @@ body.t-ferazoic { background: #1d1b22; }
 .t-ferazoic .gbtn:not(.off):hover { filter: brightness(1.15); }
 .t-ferazoic .gbtn:not(.off):active { filter: brightness(.85); }
 .t-ferazoic .gbtn:focus-visible { box-shadow: none; outline: 4px solid var(--g-gold); outline-offset: calc(-8px * var(--bs)); }
-.t-ferazoic .gback, .t-ferazoic .top a.gback { display: inline-block; width: calc(44px * var(--bs)); height: calc(26px * var(--bs)); padding: 0; box-shadow: none; background: url(../assets/games/ferazoic/ui/back.png) 0 0 / 100% 100%; }
+.t-ferazoic .gback, .t-ferazoic .top a.gback { display: inline-block; width: 88px; height: 52px; padding: 0; box-shadow: none; background: url(../assets/games/ferazoic/ui/back.png) 0 0 / 100% 100%; }
 .t-ferazoic .gback:hover { filter: brightness(1.15); }
 .t-ferazoic .top a { background: #3a343e; color: var(--g-text); box-shadow: inset 0 0 0 4px #14121880, inset 0 0 0 8px #4a4350; }
 .t-ferazoic .top a:hover { background: #4a4350; box-shadow: inset 0 0 0 4px #14121880, inset 0 0 0 8px #ffa83d; }
 .t-ferazoic .top .home { background: none; box-shadow: none; padding-left: 0; }
+/* 直接写在水泥墙上的字（左上角的店名、页脚）：和游戏里一样，浅色的字描一圈黑边 */
+.t-ferazoic .top .home, .t-ferazoic .foot { color: var(--g-text); text-shadow: 2px 2px 0 var(--ink), -2px 0 0 var(--ink), 2px 0 0 var(--ink), 0 -2px 0 var(--ink), 0 2px 0 var(--ink); }
 .t-ferazoic .top .home:hover { background: none; box-shadow: none; color: #ffa83d; }
 .t-ferazoic .feats div { box-shadow: inset 0 0 0 4px var(--g-line); background: rgba(0,0,0,.25); }
 .t-ferazoic .feats b::before { background: var(--g-gold); }
@@ -316,15 +322,16 @@ body.t-ferazoic { background: #1d1b22; }
   background-size: max(calc(720px * var(--bk)), 100%) auto;
   background-position: 50% calc(100% + (420 - var(--row)) * var(--bk) * 1px - 18px * var(--s)); }
 .t-ferazoic .gh { --row: 355; }
-.t-ferazoic .foot { color: var(--g-dim); }
 .t-ferazoic .wallh { color: var(--g-text); }
 @media (max-width: 760px) {
+  .t-ferazoic { --gu: 1; }
   .t-ferazoic .window, .t-ferazoic .gh { --bk: 1; background-position-x: 40%; }
   /* 手机上顶图的标题压在天空和楼上：和游戏里一样，给浅色的字描一圈黑边 */
   .t-ferazoic .gh .title .big { text-shadow: 3px 3px 0 var(--ink), -2px 0 0 var(--ink), 2px 0 0 var(--ink), 0 -2px 0 var(--ink), 0 2px 0 var(--ink); }
   .t-ferazoic .gh .title .en { text-shadow: 2px 2px 0 var(--ink), -1px 0 0 var(--ink), 1px 0 0 var(--ink), 0 -1px 0 var(--ink), 0 1px 0 var(--ink); }
   .t-ferazoic .top .home { display: none; }   /* 手机上左上角只留返回木牌 */
-  .t-ferazoic .panel { padding: 14px 10px 20px; }   /* 铁框已经占了 18，里面少留一点，一行能多放几个字 */
+  .t-ferazoic .foot { text-shadow: 1px 1px 0 var(--ink), -1px 0 0 var(--ink), 1px 0 0 var(--ink), 0 -1px 0 var(--ink), 0 1px 0 var(--ink); }
+  .t-ferazoic .panel { padding: 14px 10px 20px; }   /* 铁框已经占了 14，里面少留一点，一行能多放几个字 */
   /* 字小了，按钮跟着矮：铁框的图还是按 2 倍画（border-image-width），但只占 12 高的位置，字压在框里面的色块上（框本身 10 高） */
   .t-ferazoic .gbtn, .t-ferazoic .gbtn.off { border-width: 12px 16px; border-image-width: calc(12px * var(--bs)); padding: 3px 4px; line-height: 1.5; min-width: 96px; }
   .t-ferazoic .gbtn:focus-visible { outline-offset: -8px; }
